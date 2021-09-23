@@ -1,18 +1,12 @@
 import { Box, Typography } from '@mui/material';
-import { makeStyles } from '@mui/styles';
 import React from 'react';
 
-const useStyles = makeStyles({
-	footerText: { color: '#fff' },
-});
-
 function Footer() {
-	const classes = useStyles();
 	return (
 		<Box
 			component="footer"
 			sx={{
-				bgcolor: 'primary.dark',
+				bgcolor: 'primary.main',
 				color: 'primary.contrastText',
 				p: 2.5,
 				textAlign: 'center',
