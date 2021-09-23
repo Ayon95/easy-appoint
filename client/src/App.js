@@ -4,6 +4,7 @@ import { ThemeProvider } from '@mui/material';
 import Layout from './components/Layout/Layout';
 import theme from './utils/theme';
 import Login from './pages/Login';
+import Signup from './pages/Signup';
 
 function App() {
 	return (
@@ -15,6 +16,9 @@ function App() {
 						<Switch>
 							<Route exact path="/">
 								<Login />
+							</Route>
+							<Route exact path="/signup">
+								<Signup />
 							</Route>
 						</Switch>
 					</Layout>

@@ -21,7 +21,7 @@ const useStyles = makeStyles(theme => ({
 function Form({ title, handleSubmit, buttonText, children }) {
 	const classes = useStyles();
 	return (
-		<form className={classes.form} onSubmit={handleSubmit}>
+		<form className={classes.form} onSubmit={handleSubmit} noValidate>
 			<Typography variant="h4" color="primary" className={classes.formTitle}>
 				{title}
 			</Typography>
