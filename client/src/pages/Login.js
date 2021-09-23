@@ -65,12 +65,12 @@ function Login() {
 	);
 }
 
-const LoginFormContainer = styled('div')({
-	padding: '1rem',
-	height: '81.9vh',
+const LoginFormContainer = styled('div')(({ theme }) => ({
+	padding: theme.spacing(stylesConfig.formContainerPadding),
+	minHeight: '81.9vh',
 	display: 'flex',
 	justifyContent: 'center',
 	alignItems: 'center',
-});
+}));
 
 export default Login;

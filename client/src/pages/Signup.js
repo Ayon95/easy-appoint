@@ -3,7 +3,7 @@ import { Formik } from 'formik';
 import { makeStyles, styled } from '@mui/styles';
 import InputField from './../components/Forms/InputField';
 import Form from './../components/Forms/Form';
-import { Link, Typography } from '@mui/material';
+import { Grid, Link, Typography } from '@mui/material';
 import { Link as RouterLink } from 'react-router-dom';
 import stylesConfig from '../utils/stylesConfig';
 import { signupValidationSchema } from '../services/formService';
@@ -24,7 +24,13 @@ function Signup() {
 	return (
 		<SignupFormContainer>
 			<Formik
-				initialValues={{ username: '', email: '', password: '', confirmPassword: '' }}
+				initialValues={{
+					username: '',
+					email: '',
+					organization: '',
+					password: '',
+					confirmPassword: '',
+				}}
 				validationSchema={signupValidationSchema}
 				innerRef={formRef}
 				onSubmit={handleSubmit}
@@ -33,44 +39,66 @@ function Signup() {
 			>
 				{formik => (
 					<Form title="Sign Up" handleSubmit={formik.handleSubmit} buttonText="Sign up">
+						<Grid container spacing={1}>
+							<Grid item xs={12} sm={5}>
+								<InputField
+									type="text"
+									name="username"
+									label="Username"
+									value={formik.values.username}
+									handleChange={formik.handleChange}
+									// first check if the input field is touched
+									errorMessage={formik.touched.username && formik.errors.username}
+								/>
+							</Grid>
+							<Grid item xs={12} sm={7}>
+								<InputField
+									type="email"
+									name="email"
+									label="Email"
+									value={formik.values.email}
+									handleChange={formik.handleChange}
+									// first check if the input field is touched
+									errorMessage={formik.touched.email && formik.errors.email}
+								/>
+							</Grid>
+						</Grid>
+
 						<InputField
 							type="text"
-							name="username"
-							label="Username"
-							value={formik.values.username}
+							name="organization"
+							label="Organization"
+							value={formik.values.organization}
 							handleChange={formik.handleChange}
 							// first check if the input field is touched
-							errorMessage={formik.touched.username && formik.errors.username}
+							errorMessage={formik.touched.organization && formik.errors.organization}
 						/>
 
-						<InputField
-							type="email"
-							name="email"
-							label="Email"
-							value={formik.values.email}
-							handleChange={formik.handleChange}
-							// first check if the input field is touched
-							errorMessage={formik.touched.email && formik.errors.email}
-						/>
-						<InputField
-							type="password"
-							name="password"
-							label="Password"
-							value={formik.values.password}
-							handleChange={formik.handleChange}
-							// first check if the input field is touched
-							errorMessage={formik.touched.password && formik.errors.password}
-						/>
+						<Grid container spacing={1}>
+							<Grid item xs={12} sm={6}>
+								<InputField
+									type="password"
+									name="password"
+									label="Password"
+									value={formik.values.password}
+									handleChange={formik.handleChange}
+									// first check if the input field is touched
+									errorMessage={formik.touched.password && formik.errors.password}
+								/>
+							</Grid>
 
-						<InputField
-							type="password"
-							name="confirmPassword"
-							label="Confirm Password"
-							value={formik.values.confirmPassword}
-							handleChange={formik.handleChange}
-							// first check if the input field is touched
-							errorMessage={formik.touched.confirmPassword && formik.errors.confirmPassword}
-						/>
+							<Grid item xs={12} sm={6}>
+								<InputField
+									type="password"
+									name="confirmPassword"
+									label="Confirm Password"
+									value={formik.values.confirmPassword}
+									handleChange={formik.handleChange}
+									// first check if the input field is touched
+									errorMessage={formik.touched.confirmPassword && formik.errors.confirmPassword}
+								/>
+							</Grid>
+						</Grid>
 
 						<Typography className={classes.signupText}>
 							Already have an account?{' '}
@@ -85,12 +113,12 @@ function Signup() {
 	);
 }
 
-const SignupFormContainer = styled('div')({
-	padding: '1rem',
-	height: '81.9vh',
+const SignupFormContainer = styled('div')(({ theme }) => ({
+	padding: theme.spacing(stylesConfig.formContainerPadding),
+	minHeight: '81.9vh',
 	display: 'flex',
 	justifyContent: 'center',
 	alignItems: 'center',
-});
+}));
 
 export default Signup;
