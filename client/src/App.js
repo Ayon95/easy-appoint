@@ -1,9 +1,15 @@
+import { CssBaseline } from '@material-ui/core';
+import Layout from './components/Layout/Layout';
+
 function App() {
-  return (
-    <div className="App">
-      <h1>EasyAppoint</h1>
-    </div>
-  );
+	return (
+		<>
+			<CssBaseline />
+			<div className="App">
+				<Layout />
+			</div>
+		</>
+	);
 }
 
 export default App;
