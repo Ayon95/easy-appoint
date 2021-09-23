@@ -1,5 +1,5 @@
-import { Box, Typography } from '@material-ui/core';
-import { makeStyles } from '@material-ui/styles';
+import { Box, Typography } from '@mui/material';
+import { makeStyles } from '@mui/styles';
 import React from 'react';
 
 const useStyles = makeStyles({
@@ -13,13 +13,12 @@ function Footer() {
 			component="footer"
 			sx={{
 				bgcolor: 'primary.dark',
+				color: 'primary.contrastText',
 				p: 2.5,
 				textAlign: 'center',
 			}}
 		>
-			<Typography variant="body1" className={classes.footerText}>
-				&copy; 2021. Developed by Mushfiq Rahman.
-			</Typography>
+			<Typography variant="body1">&copy; 2021. Developed by Mushfiq Rahman.</Typography>
 		</Box>
 	);
 }
