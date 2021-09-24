@@ -3,6 +3,7 @@ import config from './utils/config.js';
 import express from 'express';
 import cors from 'cors';
 import userRoutes from './routes/user.js';
+import handleError from './middleware/handleError.js';
 
 const app = express();
 
@@ -14,6 +15,9 @@ app.use(cors());
 
 // applying routes related to user authentication and authorization
 app.use('/user', userRoutes);
+
+// applying the error-handler middleware
+app.use(handleError);
 
 // listen for requests on the specified port
 app.listen(config.PORT, () => {

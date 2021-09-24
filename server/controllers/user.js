@@ -2,6 +2,7 @@ import bcrypt from 'bcrypt';
 import config from '../utils/config.js';
 import jwt from 'jsonwebtoken';
 import pool from './../utils/db.js';
+import { DuplicateUserError } from '../utils/error.js';
 
 export async function signUp(request, response, next) {
 	try {
@@ -15,12 +16,7 @@ export async function signUp(request, response, next) {
 		// executing the query
 		const [duplicateUsers] = await pool.query(sqlDuplicateUser);
 		// send an error response if a user already exists
-		if (duplicateUsers.length > 0) {
-			response
-				.status(409)
-				.json({ errorMessage: 'A user with the provided email or username already exists.' });
-			return;
-		}
+		if (duplicateUsers.length > 0) throw new DuplicateUserError();
 		// generate a password hash
 		const passwordHash = await bcrypt.hash(body.password, 12);
 		// create the new user (add the user to the database)
