@@ -1,9 +1,9 @@
 // error object for when the requested resource is not found
 export class NonexistentResourceError extends Error {
-	constructor() {
+	constructor(message) {
 		super();
 		this.name = 'NonexistentResourceError';
-		this.message = 'The requested resource could not be found';
+		this.message = message;
 	}
 }
 
