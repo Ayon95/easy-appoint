@@ -13,6 +13,7 @@ export const signupValidationSchema = Yup.object({
 		.max(30, 'Username cannot exceed 30 characters')
 		.required('Username is required'),
 	email: Yup.string().email('Not a valid email').required('Email is required'),
+	organization: Yup.string().max(100, 'Organization name must be within 100 characters'),
 	password: Yup.string()
 		.min(6, 'Password needs to be at least 6 characters long')
 		.required('Password is required'),
