@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React, { useRef, useState } from 'react';
 import { Formik } from 'formik';
 import { makeStyles, styled } from '@mui/styles';
 import InputField from './../components/Forms/InputField';
@@ -7,6 +7,9 @@ import { Grid, Link, Typography } from '@mui/material';
 import { Link as RouterLink } from 'react-router-dom';
 import stylesConfig from '../utils/stylesConfig';
 import { signupValidationSchema } from '../services/formService';
+import { useMutation, useQueryClient } from 'react-query';
+import { signUp, setToken } from '../services/authService';
+import AlertComponent from '../components/Generic/AlertComponent';
 
 const useStyles = makeStyles(theme => ({
 	signupText: {
@@ -15,10 +18,43 @@ const useStyles = makeStyles(theme => ({
 }));
 
 function Signup() {
+	const [alertIsOpen, setAlertIsOpen] = useState(false);
 	const formRef = useRef();
 	const classes = useStyles();
+	const queryClient = useQueryClient();
+	// the mutation function will be called when we call mutate() which we will call when the form is submitted
+	const signupMutation = useMutation(userData => signUp(userData), {
+		// the data that onSuccess handler will receive will be the response sent from the server (an object containing user information)
+		onSuccess: userData => {
+			// need to show a success alert
+			openAlert();
+			// store the token in local storage
+			setToken(userData.token);
+			// cache the user data and map it to a query called 'user'
+			queryClient.setQueryData('user', userData);
+		},
+		// this function will be called if the mutation encounters an error; it will receive the error object
+		// need to show an error alert
+		onError: error => openAlert(),
+	});
+
+	function openAlert() {
+		setAlertIsOpen(true);
+	}
+
+	function closeAlert() {
+		setAlertIsOpen(false);
+	}
+
 	function handleSubmit(values, actions) {
-		console.log(values.username, values.email, values.password, values.confirmPassword);
+		const userData = {
+			username: values.username,
+			email: values.email,
+			...(values.organization && { organization: values.organization }),
+			password: values.password,
+		};
+		// this will result in sending a POST request to the server for user signup
+		signupMutation.mutate(userData);
 		actions.resetForm();
 	}
 	return (
@@ -106,6 +142,22 @@ function Signup() {
 								Log in
 							</Link>
 						</Typography>
+						{signupMutation.isError && (
+							<AlertComponent
+								type="error"
+								message={signupMutation.error.message}
+								isOpen={alertIsOpen}
+								closeAlert={closeAlert}
+							/>
+						)}
+						{signupMutation.isSuccess && (
+							<AlertComponent
+								type="success"
+								message="Account created successfully!"
+								isOpen={alertIsOpen}
+								closeAlert={closeAlert}
+							/>
+						)}
 					</Form>
 				)}
 			</Formik>

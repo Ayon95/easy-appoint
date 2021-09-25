@@ -30,6 +30,6 @@ export class DuplicateUserError extends Error {
 	constructor() {
 		super();
 		this.name = 'DuplicateUserError';
-		this.message = 'A user with this email or username already exists';
+		this.message = 'Error - A user with this email or username already exists!';
 	}
 }
