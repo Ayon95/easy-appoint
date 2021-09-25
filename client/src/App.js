@@ -5,6 +5,8 @@ import Layout from './components/Layout/Layout';
 import theme from './utils/theme';
 import Login from './pages/Login';
 import Signup from './pages/Signup';
+import Home from './pages/Home';
+import ProtectedRoute from './components/Generic/ProtectedRoute';
 
 function App() {
 	return (
@@ -14,12 +16,13 @@ function App() {
 				<div className="App">
 					<Layout>
 						<Switch>
-							<Route exact path="/">
+							<Route exact path="/login">
 								<Login />
 							</Route>
 							<Route exact path="/signup">
 								<Signup />
 							</Route>
+							<ProtectedRoute path="/" exact={true} component={Home} />
 						</Switch>
 					</Layout>
 				</div>
