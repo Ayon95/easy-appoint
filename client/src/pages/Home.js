@@ -4,6 +4,7 @@ import { Add } from '@mui/icons-material';
 import React, { useState } from 'react';
 import Modal from './../components/Generic/Modal';
 import Searchbar from '../components/Generic/Searchbar';
+import AddAppointmentForm from '../components/Forms/AddAppointmentForm';
 
 const pageContainerStyles = { minHeight: '80.4vh', paddingX: 2, paddingY: 4 };
 
@@ -37,7 +38,7 @@ function Home() {
 			<Searchbar />
 			{modalIsOpen && (
 				<Modal title="Add Appointment" modalIsOpen={modalIsOpen} closeModal={closeModal}>
-					This is where the form will be
+					<AddAppointmentForm />
 				</Modal>
 			)}
 		</Container>
