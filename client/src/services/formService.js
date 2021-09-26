@@ -23,4 +23,9 @@ export const signupValidationSchema = Yup.object({
 		.required('Please confirm your password'),
 });
 
-export const addAppointmentValidationSchema = Yup.object({});
+export const addAppointmentValidationSchema = Yup.object({
+	fullName: Yup.string()
+		.required('Full name is required')
+		.matches(/^[a-z\s]+$/i, 'Not a valid name'),
+	date: Yup.date().required('Date is required'),
+});

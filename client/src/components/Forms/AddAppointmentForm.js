@@ -23,8 +23,8 @@ function AddAppointmentForm() {
 				fullName: '',
 				age: '',
 				phoneNumber: '',
-				date: null,
-				time: null,
+				date: Date.now(),
+				time: Date.now(),
 			}}
 			validationSchema={addAppointmentValidationSchema}
 			innerRef={formRef}
