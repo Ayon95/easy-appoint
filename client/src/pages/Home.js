@@ -3,6 +3,7 @@ import { styled } from '@mui/material/styles';
 import { Add } from '@mui/icons-material';
 import React, { useState } from 'react';
 import Modal from './../components/Generic/Modal';
+import Searchbar from '../components/Generic/Searchbar';
 
 const pageContainerStyles = { minHeight: '80.4vh', paddingX: 2, paddingY: 4 };
 
@@ -33,6 +34,7 @@ function Home() {
 					Add Appointment
 				</Button>
 			</TitleAndButtonContainer>
+			<Searchbar />
 			{modalIsOpen && (
 				<Modal title="Add Appointment" modalIsOpen={modalIsOpen} closeModal={closeModal}>
 					This is where the form will be
@@ -44,7 +46,8 @@ function Home() {
 
 export default Home;
 
-const TitleAndButtonContainer = styled('div')({
+const TitleAndButtonContainer = styled('div')(({ theme }) => ({
 	display: 'flex',
 	justifyContent: 'space-between',
-});
+	marginBottom: theme.spacing(2),
+}));
