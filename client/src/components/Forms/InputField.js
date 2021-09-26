@@ -1,18 +1,10 @@
 import { TextField } from '@mui/material';
-import { makeStyles } from '@mui/styles';
-
-const useStyles = makeStyles(theme => ({
-	textField: {
-		marginBottom: theme.spacing(2.5),
-	},
-}));
 
 const InputField = props => {
-	const classes = useStyles();
 	const { type, name, label, value, handleChange, errorMessage, ...rest } = props;
 	return (
 		<TextField
-			className={classes.textField}
+			sx={{ marginBottom: 2.5 }}
 			fullWidth
 			type={type}
 			variant="outlined"

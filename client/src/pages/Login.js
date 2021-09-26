@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useRef, useState } from 'react';
 import { Formik } from 'formik';
-import { makeStyles, styled } from '@mui/styles';
+import { styled } from '@mui/material/styles';
 import InputField from './../components/Forms/InputField';
 import Form from './../components/Forms/Form';
 import { Link, Typography } from '@mui/material';
@@ -10,17 +10,10 @@ import { loginValidationSchema } from '../services/formService';
 import AlertComponent from '../components/Generic/AlertComponent';
 import { AuthContext } from '../contexts/AuthContext';
 
-const useStyles = makeStyles(theme => ({
-	signupText: {
-		marginBottom: theme.spacing(stylesConfig.formSpacing),
-	},
-}));
-
 function Login() {
 	const { user, logIn, isLoading, error } = useContext(AuthContext);
 	const [alertIsOpen, setAlertIsOpen] = useState(false);
 	const formRef = useRef();
-	const classes = useStyles();
 	const history = useHistory();
 
 	function closeAlert() {
@@ -69,7 +62,7 @@ function Login() {
 							errorMessage={formik.touched.password && formik.errors.password}
 						/>
 
-						<Typography className={classes.signupText}>
+						<Typography sx={{ marginBottom: stylesConfig.formSpacing }}>
 							Don't have an account?{' '}
 							<Link underline="hover" component={RouterLink} to="/signup">
 								Sign up

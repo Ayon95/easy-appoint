@@ -1,36 +1,29 @@
 import React from 'react';
 import { Button, Typography } from '@mui/material';
-import { makeStyles } from '@mui/styles';
+import { styled } from '@mui/material/styles';
 import stylesConfig from '../../utils/stylesConfig';
 
-const useStyles = makeStyles(theme => ({
-	form: {
-		borderRadius: '4px',
-		padding: theme.spacing(stylesConfig.formPadding),
-		backgroundColor: '#fff',
-		boxShadow: 'rgba(0, 0, 0, 0.24) 0px 3px 8px',
-		width: '100%',
-		maxWidth: '50rem',
-	},
-
-	formTitle: {
-		marginBottom: theme.spacing(stylesConfig.formSpacing),
-	},
-}));
-
 function Form({ title, handleSubmit, buttonText, children }) {
-	const classes = useStyles();
 	return (
-		<form className={classes.form} onSubmit={handleSubmit} noValidate>
-			<Typography variant="h4" color="primary" className={classes.formTitle}>
+		<FormComponent onSubmit={handleSubmit} noValidate>
+			<Typography variant="h4" color="primary" sx={{ marginBottom: stylesConfig.formSpacing }}>
 				{title}
 			</Typography>
 			{children}
 			<Button type="submit" variant="contained" size="large">
 				{buttonText}
 			</Button>
-		</form>
+		</FormComponent>
 	);
 }
+
+const FormComponent = styled('form')(({ theme }) => ({
+	borderRadius: '4px',
+	padding: theme.spacing(stylesConfig.formPadding),
+	backgroundColor: '#fff',
+	boxShadow: 'rgba(0, 0, 0, 0.24) 0px 3px 8px',
+	width: '100%',
+	maxWidth: '50rem',
+}));
 
 export default Form;
