@@ -17,7 +17,7 @@ export async function logIn(request, response, next) {
 		const user = result[0];
 		// if no such user is found, then throw an error
 		if (!user) {
-			throw new NonexistentResourceError('No user exists with the given username');
+			throw new NonexistentResourceError('Error - No user exists with the given username');
 		}
 		// check if the user provided the correct password
 		const passwordIsCorrect = await bcrypt.compare(body.password, user.passwordHash);

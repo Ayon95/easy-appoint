@@ -1,15 +1,14 @@
-import React, { useRef, useState } from 'react';
+import React, { useContext, useEffect, useRef, useState } from 'react';
 import { Formik } from 'formik';
 import { makeStyles, styled } from '@mui/styles';
 import InputField from './../components/Forms/InputField';
 import Form from './../components/Forms/Form';
 import { Grid, Link, Typography } from '@mui/material';
-import { Link as RouterLink } from 'react-router-dom';
+import { Link as RouterLink, useHistory } from 'react-router-dom';
 import stylesConfig from '../utils/stylesConfig';
 import { signupValidationSchema } from '../services/formService';
-import { useMutation, useQueryClient } from 'react-query';
-import { signUp, setToken } from '../services/authService';
 import AlertComponent from '../components/Generic/AlertComponent';
+import { AuthContext } from '../contexts/AuthContext';
 
 const useStyles = makeStyles(theme => ({
 	signupText: {
@@ -18,35 +17,22 @@ const useStyles = makeStyles(theme => ({
 }));
 
 function Signup() {
+	const { user, signUp, isLoading, error } = useContext(AuthContext);
 	const [alertIsOpen, setAlertIsOpen] = useState(false);
 	const formRef = useRef();
 	const classes = useStyles();
-	const queryClient = useQueryClient();
-	// the mutation function will be called when we call mutate() which we will call when the form is submitted
-	const signupMutation = useMutation(userData => signUp(userData), {
-		// the data that onSuccess handler will receive will be the response sent from the server (an object containing user information)
-		onSuccess: userData => {
-			// need to show a success alert
-			openAlert();
-			// store the token in local storage
-			setToken(userData.token);
-			// cache the user data and map it to a query called 'user'
-			queryClient.setQueryData('user', userData);
-		},
-		// this function will be called if the mutation encounters an error; it will receive the error object
-		// need to show an error alert
-		onError: error => openAlert(),
-	});
-
-	function openAlert() {
-		setAlertIsOpen(true);
-	}
+	const history = useHistory();
 
 	function closeAlert() {
 		setAlertIsOpen(false);
 	}
 
-	function handleSubmit(values, actions) {
+	// take the user to the Home page if the signup process was successful (and there is a user)
+	useEffect(() => {
+		if (user) history.push('/');
+	}, [user, history]);
+
+	async function handleSubmit(values) {
 		const userData = {
 			username: values.username,
 			email: values.email,
@@ -54,8 +40,9 @@ function Signup() {
 			password: values.password,
 		};
 		// this will result in sending a POST request to the server for user signup
-		signupMutation.mutate(userData);
-		actions.resetForm();
+		await signUp(userData);
+		// need to show an alert (if there is any error)
+		setAlertIsOpen(true);
 	}
 	return (
 		<SignupFormContainer>
@@ -142,15 +129,15 @@ function Signup() {
 								Log in
 							</Link>
 						</Typography>
-						{signupMutation.isError && (
+						{error && (
 							<AlertComponent
 								type="error"
-								message={signupMutation.error.message}
+								message={error}
 								isOpen={alertIsOpen}
 								closeAlert={closeAlert}
 							/>
 						)}
-						{signupMutation.isSuccess && (
+						{!error && (
 							<AlertComponent
 								type="success"
 								message="Account created successfully!"

@@ -21,7 +21,7 @@ export class PasswordError extends Error {
 	constructor() {
 		super();
 		this.name = 'PasswordError';
-		this.message = 'Incorrect password provided';
+		this.message = 'Error - Incorrect password provided';
 	}
 }
 
@@ -30,6 +30,6 @@ export class DuplicateUserError extends Error {
 	constructor() {
 		super();
 		this.name = 'DuplicateUserError';
-		this.message = 'Error - A user with this email or username already exists!';
+		this.message = 'Error - A user with this email or username already exists';
 	}
 }

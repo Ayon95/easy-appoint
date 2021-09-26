@@ -1,12 +1,14 @@
-import React, { useRef } from 'react';
+import React, { useContext, useEffect, useRef, useState } from 'react';
 import { Formik } from 'formik';
 import { makeStyles, styled } from '@mui/styles';
 import InputField from './../components/Forms/InputField';
 import Form from './../components/Forms/Form';
 import { Link, Typography } from '@mui/material';
-import { Link as RouterLink } from 'react-router-dom';
+import { Link as RouterLink, useHistory } from 'react-router-dom';
 import stylesConfig from '../utils/stylesConfig';
 import { loginValidationSchema } from '../services/formService';
+import AlertComponent from '../components/Generic/AlertComponent';
+import { AuthContext } from '../contexts/AuthContext';
 
 const useStyles = makeStyles(theme => ({
 	signupText: {
@@ -15,11 +17,26 @@ const useStyles = makeStyles(theme => ({
 }));
 
 function Login() {
+	const { user, logIn, isLoading, error } = useContext(AuthContext);
+	const [alertIsOpen, setAlertIsOpen] = useState(false);
 	const formRef = useRef();
 	const classes = useStyles();
-	function handleSubmit(values, actions) {
-		console.log(values.username, values.password);
-		actions.resetForm();
+	const history = useHistory();
+
+	function closeAlert() {
+		setAlertIsOpen(false);
+	}
+
+	// take the user to the Home page if the login process was successful (and there is a user)
+	useEffect(() => {
+		if (user) history.push('/');
+	}, [user, history]);
+
+	async function handleSubmit(values) {
+		// this will result in sending a POST request to the server for user login
+		await logIn(values.username, values.password);
+		// may need to show an alert (if there is any error)
+		setAlertIsOpen(true);
 	}
 	return (
 		<LoginFormContainer>
@@ -58,6 +75,15 @@ function Login() {
 								Sign up
 							</Link>
 						</Typography>
+						{/* need to show an error alert if the login process failed due to an error */}
+						{error && (
+							<AlertComponent
+								type="error"
+								message={error}
+								isOpen={alertIsOpen}
+								closeAlert={closeAlert}
+							/>
+						)}
 					</Form>
 				)}
 			</Formik>

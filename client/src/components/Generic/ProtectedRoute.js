@@ -1,11 +1,9 @@
-import React from 'react';
-import { useQueryClient } from 'react-query';
+import React, { useContext } from 'react';
 import { Route, Redirect } from 'react-router-dom';
+import { AuthContext } from '../../contexts/AuthContext';
 
 function ProtectedRoute({ path, exact, component: Component }) {
-	const queryClient = useQueryClient();
-	// getting the user data of the logged-in user
-	const user = queryClient.getQueryData('user');
+	const { user } = useContext(AuthContext);
 	return (
 		<Route
 			path={path}
