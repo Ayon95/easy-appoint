@@ -24,13 +24,13 @@ export async function logIn(request, response, next) {
 		if (!passwordIsCorrect) throw new PasswordError();
 		// generating a digitally-signed token containing the specified payload and signed with the secret string
 		// the token payload contains necessary user information that the server can later use to verify the user who made the request
-		const payload = { userId: result.insertId };
+		const payload = { userId: user.user_id };
 		const token = jwt.sign(payload, config.JWT_SECRET, { expiresIn: '5h' });
 
 		response.status(201).json({
 			token,
-			username: body.username,
-			userId: result.insertId,
+			username: user.username,
+			userId: user.user_id,
 		});
 	} catch (error) {
 		next(error);

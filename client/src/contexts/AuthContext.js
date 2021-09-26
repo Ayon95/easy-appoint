@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 const baseUrl = 'http://localhost:5000/user';
 export const AuthContext = React.createContext();
@@ -7,6 +7,12 @@ function AuthContextProvider({ children }) {
 	const [user, setUser] = useState(null);
 	const [isLoading, setIsLoading] = useState(false);
 	const [error, setError] = useState('');
+
+	// get user from local storage (if any) after this component mounts for the first time (when the app run)
+	useEffect(() => {
+		const userData = JSON.parse(localStorage.getItem('EasyAppointUser'));
+		setUser(userData);
+	}, []);
 
 	// this async function will send a POST request to the server for user signup
 	async function signUp(userData) {
@@ -26,8 +32,8 @@ function AuthContextProvider({ children }) {
 			}
 			// if we reach this point, then it means that the request was successful
 			const data = await response.json();
-			// save the token to local storage
-			localStorage.setItem('EasyAppointAuthToken', data.token);
+			// save the user data to local storage
+			localStorage.setItem('EasyAppointUser', JSON.stringify(data));
 
 			setIsLoading(false);
 			setUser(data);
@@ -54,8 +60,8 @@ function AuthContextProvider({ children }) {
 			}
 
 			const data = await response.json();
-			// save the token to local storage
-			localStorage.setItem('EasyAppointAuthToken', data.token);
+			// save the user data to local storage
+			localStorage.setItem('EasyAppointUser', JSON.stringify(data));
 
 			setIsLoading(false);
 			setUser(data);
@@ -68,7 +74,7 @@ function AuthContextProvider({ children }) {
 	// this function logs the user out
 	function logOut() {
 		// remove the token from local storage
-		localStorage.removeItem('EasyAppointAuthToken');
+		localStorage.removeItem('EasyAppointUser');
 		// remove user from local state
 		setUser(null);
 	}
