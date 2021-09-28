@@ -5,6 +5,7 @@ import React, { useState } from 'react';
 import Modal from './../components/Generic/Modal';
 import Searchbar from '../components/Generic/Searchbar';
 import AddAppointmentForm from '../components/Forms/AddAppointmentForm';
+import AppointmentTable from '../components/AppointmentTable/AppointmentTable';
 
 const pageContainerStyles = { minHeight: '80.4vh', paddingX: 2, paddingY: 4 };
 
@@ -36,6 +37,7 @@ function Home() {
 				</Button>
 			</TitleAndButtonContainer>
 			<Searchbar />
+			<AppointmentTable />
 			{modalIsOpen && (
 				<Modal title="Add Appointment" modalIsOpen={modalIsOpen} closeModal={closeModal}>
 					<AddAppointmentForm />

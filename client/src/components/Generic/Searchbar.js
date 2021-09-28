@@ -28,6 +28,7 @@ function Searchbar() {
 
 export default Searchbar;
 
-const SearchbarContainer = styled('div')({
+const SearchbarContainer = styled('div')(({ theme }) => ({
 	display: 'flex',
-});
+	marginBottom: theme.spacing(2),
+}));
