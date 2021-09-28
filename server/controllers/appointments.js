@@ -1,6 +1,53 @@
 import { UnauthorizedUserError } from '../utils/error.js';
 import pool from '../utils/db.js';
 
+export async function getAppointments(request, response, next) {
+	try {
+		// check if the request was made by an authorized user
+		const user = request.user;
+		if (!user) {
+			throw new UnauthorizedUserError();
+		}
+		// getting the query params
+		let page = Number.parseFloat(request.query.page);
+		let rowsPerPage = Number.parseFloat(request.query.rows_per_page);
+		// find the total number of appointments
+		const [appointmentsCountResult] = await pool.query(
+			'SELECT COUNT(appointment_id) AS count FROM appointment'
+		);
+		const totalAppointments = appointmentsCountResult[0].count;
+		// if valid rowsPerPage is not provided, then set it to 25
+		if (!rowsPerPage || rowsPerPage === 0) rowsPerPage = 25;
+		// find the total number of pages
+		const totalPages = Math.ceil(totalAppointments / rowsPerPage);
+		// if a valid page number is not provided, then set it to 1
+		if (!page || page < 1 || page > totalPages) page = 1;
+		// calculate the start and end indexes (first page is 1)
+		const startIndex = (page - 1) * rowsPerPage;
+		const endIndex = page * rowsPerPage;
+		// get the appointments for the specified page
+		const sqlGetAppointments = `
+			SELECT
+				appointment_id,
+				full_name,
+				age, 
+				phone_number,
+				DATE_FORMAT(date, '%a %b %e, %Y') AS date,
+				TIME_FORMAT(time, '%h:%i %p') AS time
+			FROM appointment
+			ORDER BY
+				appointment.date DESC,
+				appointment.time DESC
+			LIMIT ${pool.escape(startIndex)}, ${pool.escape(endIndex)}
+		`;
+		const [appointments] = await pool.query(sqlGetAppointments);
+
+		response.json({ totalAppointments, appointments });
+	} catch (error) {
+		next(error);
+	}
+}
+
 export async function addAppointment(request, response, next) {
 	try {
 		// check if the request was made by an authorized user

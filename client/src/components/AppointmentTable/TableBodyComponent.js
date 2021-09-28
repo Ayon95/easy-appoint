@@ -3,14 +3,15 @@ import { IconButton, TableBody, TableCell, TableRow } from '@mui/material';
 import React from 'react';
 
 function TableBodyComponent({ appointments }) {
+	// an appointment object will look like {appointment_id: , full_name: , age: , phone_number: , date: , time: }
 	return (
 		<TableBody>
 			{appointments.map(appointment => (
-				<TableRow key={appointment.appointmentId}>
-					<TableCell>{appointment.appointmentId}</TableCell>
-					<TableCell>{appointment.fullName}</TableCell>
+				<TableRow key={appointment.appointment_id}>
+					<TableCell>{appointment.appointment_id}</TableCell>
+					<TableCell>{appointment.full_name}</TableCell>
 					<TableCell>{appointment.age}</TableCell>
-					<TableCell>{appointment.phoneNumber}</TableCell>
+					<TableCell>{appointment.phone_number}</TableCell>
 					<TableCell>{appointment.date}</TableCell>
 					<TableCell>{appointment.time}</TableCell>
 					<TableCell>

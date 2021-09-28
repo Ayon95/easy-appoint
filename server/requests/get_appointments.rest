@@ -1,0 +1,2 @@
+GET http://localhost:5000/appointments?page=1&rows_per_page=25
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjE5LCJpYXQiOjE2MzI4Njg5NTAsImV4cCI6MTYzMjg4Njk1MH0.DSF-EiTx1TNLJLzQZ4FNvJzgfuuzwaCXsDJ3g2TEjzQ
