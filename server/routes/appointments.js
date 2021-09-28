@@ -1,5 +1,5 @@
 import express from 'express';
-import { addAppointment } from '../controllers/appointment.js';
+import { addAppointment } from '../controllers/appointments.js';
 
 const router = new express.Router();
 
