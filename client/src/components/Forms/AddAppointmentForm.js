@@ -4,18 +4,35 @@ import { Button, Grid, TextField } from '@mui/material';
 import { DatePicker, TimePicker } from '@mui/lab';
 import InputField from './InputField';
 import { addAppointmentValidationSchema } from '../../services/formService';
+import { useMutation, useQueryClient } from 'react-query';
+import { addAppointment } from '../../services/appointmentService';
+import { format } from 'date-fns';
 
 function AddAppointmentForm() {
 	const formRef = useRef();
+	const queryClient = useQueryClient();
+	// this mutation will be responsible for sending a POST request to the server for adding an appointment
+	const mutation = useMutation(appointmentData => addAppointment(appointmentData), {
+		// this function will be called after the mutation was performed successfully
+		onSuccess: () => {
+			// invalidate the 'appointments' query so that it re-fetches the updated data
+			queryClient.invalidateQueries('appointments');
+			// reset the form
+			formRef.current.resetForm();
+		},
+	});
 
 	function handleSubmit(values) {
-		console.log({
+		const appointmentData = {
 			fullName: values.fullName,
 			age: values.age,
 			phoneNumber: values.phoneNumber,
-			date: values.date,
-			time: values.time,
-		});
+			date: format(values.date, 'yyyy-MM-dd'),
+			time: format(values.time, 'hh:mm:ss'),
+		};
+
+		// this will trigger the mutation function that will send a POST request to the server to add an appointment
+		mutation.mutate(appointmentData);
 	}
 	return (
 		<Formik
