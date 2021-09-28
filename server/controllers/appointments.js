@@ -9,7 +9,7 @@ export async function addAppointment(request, response, next) {
 			throw new UnauthorizedUserError();
 		}
 
-		const { body } = response;
+		const { body } = request;
 
 		// create an entry for the appointment and insert it into the database
 		const sql = `

@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React, { useContext, useRef } from 'react';
 import { Formik } from 'formik';
 import { Button, Grid, TextField } from '@mui/material';
 import { DatePicker, TimePicker } from '@mui/lab';
@@ -7,12 +7,15 @@ import { addAppointmentValidationSchema } from '../../services/formService';
 import { useMutation, useQueryClient } from 'react-query';
 import { addAppointment } from '../../services/appointmentService';
 import { format } from 'date-fns';
+import { AuthContext } from '../../contexts/AuthContext';
 
 function AddAppointmentForm() {
 	const formRef = useRef();
 	const queryClient = useQueryClient();
+	const { user } = useContext(AuthContext);
 	// this mutation will be responsible for sending a POST request to the server for adding an appointment
-	const mutation = useMutation(appointmentData => addAppointment(appointmentData), {
+	// the requestData object will contain user token and the appointment object
+	const mutation = useMutation(requestData => addAppointment(requestData), {
 		// this function will be called after the mutation was performed successfully
 		onSuccess: () => {
 			// invalidate the 'appointments' query so that it re-fetches the updated data
@@ -23,16 +26,17 @@ function AddAppointmentForm() {
 	});
 
 	function handleSubmit(values) {
-		const appointmentData = {
+		const appointment = {
 			fullName: values.fullName,
 			age: values.age,
 			phoneNumber: values.phoneNumber,
 			date: format(values.date, 'yyyy-MM-dd'),
 			time: format(values.time, 'hh:mm:ss'),
+			userId: user.userId,
 		};
 
 		// this will trigger the mutation function that will send a POST request to the server to add an appointment
-		mutation.mutate(appointmentData);
+		mutation.mutate({ token: user.token, appointment });
 	}
 	return (
 		<Formik

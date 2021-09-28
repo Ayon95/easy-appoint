@@ -16,7 +16,7 @@ Example:
 */
 
 import jwt from 'jsonwebtoken';
-import config from '../utils/config';
+import config from '../utils/config.js';
 import { AuthHeaderError, NonexistentResourceError } from '../utils/error.js';
 import pool from '../utils/db.js';
 
@@ -35,13 +35,13 @@ async function authorizeUser(request, response, next) {
 		// verifying our server-generated token and getting its decoded payload
 		// if the token is missing or is invalid, then a JsonWebTokenError will be thrown
 		// if the token is expired, then a TokenExpiredError will be thrown
-		decodedPayload = jwt.verify(token, config.JWT_SECRET);
+		const decodedPayload = jwt.verify(token, config.JWT_SECRET);
 
 		// find the corresponding user in the database
 		const sql = `
 			SELECT *
 			FROM app_user
-			WHERE username = ${pool.escape(decodedPayload.userId)}
+			WHERE user_id = ${pool.escape(decodedPayload.userId)}
 		`;
 		const [result] = await pool.query(sql);
 		const user = result[0];

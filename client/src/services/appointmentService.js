@@ -1,11 +1,14 @@
-const baseUrl = 'http://localhost:5000/appointment';
+const baseUrl = 'http://localhost:5000/appointments';
 
 // this function will send a POST request to the server for adding an appointment
-export async function addAppointment(appointmentData) {
+export async function addAppointment(requestData) {
 	const response = await fetch(baseUrl, {
 		method: 'POST',
-		headers: { 'Content-Type': 'application/json' },
-		body: JSON.stringify(appointmentData),
+		headers: {
+			'Content-Type': 'application/json',
+			Authorization: `Bearer ${requestData.token}`,
+		},
+		body: JSON.stringify(requestData.appointment),
 	});
 
 	if (!response.ok) {
