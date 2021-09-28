@@ -25,6 +25,15 @@ export class PasswordError extends Error {
 	}
 }
 
+// error object for when an unauthorized user tries to access a protected resource
+export class UnauthorizedUserError extends Error {
+	constructor() {
+		super();
+		this.name = 'UnauthorizedUserError';
+		this.message = 'User is not authorized to access this resource';
+	}
+}
+
 // error object for when a user tries to create an account with an email that is already in use
 export class DuplicateUserError extends Error {
 	constructor() {

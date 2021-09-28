@@ -3,6 +3,7 @@ import config from './utils/config.js';
 import express from 'express';
 import cors from 'cors';
 import userRoutes from './routes/user.js';
+import appointmentRoutes from './routes/appointment.js';
 import handleError from './middleware/handleError.js';
 
 const app = express();
@@ -15,6 +16,9 @@ app.use(cors());
 
 // applying routes related to user authentication and authorization
 app.use('/user', userRoutes);
+
+// applying routes related to appointments
+app.use('/appointment', appointmentRoutes);
 
 // applying the error-handler middleware
 app.use(handleError);

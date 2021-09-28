@@ -13,6 +13,8 @@ function handleError(error, request, response, next) {
 		// error that is thrown when incorrect password is provided
 		case 'PasswordError':
 			return response.status(401).json({ errorMessage: error.message });
+		case 'UnauthorizedUserError':
+			return response.status(401).json({ errorMessage: error.message });
 		// handling JsonWebTokenError exception that is thrown when a token cannot be verified
 		case 'JsonWebTokenError':
 			return response.status(401).json({ errorMessage: 'Token is invalid' });
