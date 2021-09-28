@@ -111,7 +111,7 @@ function AddAppointmentForm() {
 						</Grid>
 					</Grid>
 
-					<Button type="submit" variant="contained" size="large">
+					<Button type="submit" variant="contained" size="large" disabled={mutation.isLoading}>
 						Add Appointment
 					</Button>
 				</form>

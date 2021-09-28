@@ -42,7 +42,12 @@ function Login() {
 				validateOnChange={false}
 			>
 				{formik => (
-					<Form title="Log In" handleSubmit={formik.handleSubmit} buttonText="Log In">
+					<Form
+						title="Log In"
+						handleSubmit={formik.handleSubmit}
+						buttonText="Log In"
+						isLoading={isLoading}
+					>
 						<InputField
 							type="text"
 							name="username"

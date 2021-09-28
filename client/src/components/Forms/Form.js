@@ -3,14 +3,14 @@ import { Button, Typography } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import stylesConfig from '../../utils/stylesConfig';
 
-function Form({ title, handleSubmit, buttonText, children }) {
+function Form({ title, handleSubmit, buttonText, isLoading, children }) {
 	return (
 		<FormComponent onSubmit={handleSubmit} noValidate>
 			<Typography variant="h4" color="primary" sx={{ marginBottom: stylesConfig.formSpacing }}>
 				{title}
 			</Typography>
 			{children}
-			<Button type="submit" variant="contained" size="large">
+			<Button type="submit" variant="contained" size="large" disabled={isLoading}>
 				{buttonText}
 			</Button>
 		</FormComponent>

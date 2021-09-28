@@ -54,7 +54,12 @@ function Signup() {
 				validateOnChange={false}
 			>
 				{formik => (
-					<Form title="Sign Up" handleSubmit={formik.handleSubmit} buttonText="Sign up">
+					<Form
+						title="Sign Up"
+						handleSubmit={formik.handleSubmit}
+						buttonText="Sign up"
+						isLoading={isLoading}
+					>
 						<Grid container spacing={1}>
 							<Grid item xs={12} sm={5}>
 								<InputField
