@@ -13,6 +13,14 @@ function TableRowComponent({ appointment }) {
 	const removeAppointmentMutation = useMutation(requestData => removeAppointment(requestData), {
 		onSuccess: () => queryClient.invalidateQueries('appointments'),
 	});
+
+	function handleClickDelete(appointmentId) {
+		// this will open a dialog and ask the user to confirm the action
+		const shouldDelete = window.confirm('Are you sure you want to remove this entry?');
+		if (shouldDelete) {
+			removeAppointmentMutation.mutate({ appointmentId, token: user.token });
+		}
+	}
 	return (
 		<TableRow>
 			<TableCell>{appointment_id}</TableCell>
@@ -25,12 +33,7 @@ function TableRowComponent({ appointment }) {
 				<IconButton title="Edit">
 					<EditOutlined color="primary" />
 				</IconButton>
-				<IconButton
-					title="Delete"
-					onClick={() =>
-						removeAppointmentMutation.mutate({ appointmentId: appointment_id, token: user.token })
-					}
-				>
+				<IconButton title="Delete" onClick={() => handleClickDelete(appointment_id)}>
 					<DeleteOutlined color="error" />
 				</IconButton>
 			</TableCell>
