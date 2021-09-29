@@ -42,3 +42,22 @@ export async function addAppointment(requestData) {
 	const data = await response.json();
 	return data;
 }
+
+// this function will send a DELETE request to the server to delete an appointment
+export async function removeAppointment(requestData) {
+	const response = await fetch(`${baseUrl}/${requestData.appointmentId}`, {
+		method: 'DELETE',
+		headers: {
+			Authorization: `Bearer ${requestData.token}`,
+		},
+	});
+
+	if (!response.ok) {
+		const error = await response.json();
+		throw new Error(error.errorMessage);
+	}
+
+	// if the request is successful, then the server will respond with an empty object and with a 204 (No content) status code
+	const data = await response.json();
+	return data;
+}

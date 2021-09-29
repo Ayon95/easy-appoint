@@ -31,7 +31,8 @@ function AddAppointmentForm() {
 			age: values.age,
 			phoneNumber: values.phoneNumber,
 			date: format(values.date, 'yyyy-MM-dd'),
-			time: format(values.time, 'hh:mm:ss'),
+			// 24-hour format is 'kk' in date-fns
+			time: format(values.time, 'kk:mm:ss'),
 			userId: user.userId,
 		};
 
