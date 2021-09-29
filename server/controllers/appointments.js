@@ -1,4 +1,4 @@
-import { UnauthorizedUserError } from '../utils/error.js';
+import { NonexistentResourceError, UnauthorizedUserError } from '../utils/error.js';
 import pool from '../utils/db.js';
 
 export async function getAppointments(request, response, next) {
@@ -88,6 +88,35 @@ export async function addAppointment(request, response, next) {
 			time: body.time,
 			userId: body.userId,
 		});
+	} catch (error) {
+		next(error);
+	}
+}
+
+export async function removeAppointment(request, response, next) {
+	try {
+		// check if the request was made by an authorized user
+		const user = request.user;
+		if (!user) {
+			throw new UnauthorizedUserError();
+		}
+		// check if an appointment exists with the given id
+		const { appointmentId } = request.params;
+		const sqlGetAppointment = `
+			SELECT * FROM appointment
+			WHERE appointment_id = ${pool.escape(appointmentId)}
+		`;
+		const [result] = await pool.query(sqlGetAppointment);
+		if (result.length === 0) {
+			throw new NonexistentResourceError('No appointment with the given ID exists');
+		}
+		// delete the appointment from the database
+		const sqlRemoveAppointment = `
+			DELETE FROM appointment
+			WHERE appointment_id = ${pool.escape(appointmentId)}
+		`;
+		await pool.query(sqlRemoveAppointment);
+		response.status(204).json({});
 	} catch (error) {
 		next(error);
 	}

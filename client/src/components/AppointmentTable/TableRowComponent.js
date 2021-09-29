@@ -27,7 +27,9 @@ function TableRowComponent({ appointment }) {
 				</IconButton>
 				<IconButton
 					title="Delete"
-					onClick={() => removeAppointmentMutation.mutate({ appointment_id, token: user.token })}
+					onClick={() =>
+						removeAppointmentMutation.mutate({ appointmentId: appointment_id, token: user.token })
+					}
 				>
 					<DeleteOutlined color="error" />
 				</IconButton>

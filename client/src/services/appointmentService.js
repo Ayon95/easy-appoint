@@ -57,7 +57,5 @@ export async function removeAppointment(requestData) {
 		throw new Error(error.errorMessage);
 	}
 
-	// if the request is successful, then the server will respond with an empty object and with a 204 (No content) status code
-	const data = await response.json();
-	return data;
+	// if the request is successful, then the server will respond with a 204 (No content) status code
 }
