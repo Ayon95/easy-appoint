@@ -1,11 +1,19 @@
 import express from 'express';
-import { addAppointment, getAppointments, removeAppointment } from '../controllers/appointments.js';
+import {
+	addAppointment,
+	getAppointments,
+	getAppointmentsBySearch,
+	removeAppointment,
+} from '../controllers/appointments.js';
 import authorizeUser from './../middleware/authorizeUser.js';
 
 const router = new express.Router();
 
 // route for GET request to get appointments
 router.get('/', authorizeUser, getAppointments);
+
+// route for GET request to get appointments by search term
+router.get('/search', authorizeUser, getAppointmentsBySearch);
 
 // route for POST request to add an appointment
 router.post('/', authorizeUser, addAppointment);

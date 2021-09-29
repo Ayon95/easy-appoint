@@ -48,6 +48,29 @@ export async function getAppointments(request, response, next) {
 	}
 }
 
+export async function getAppointmentsBySearch(request, response, next) {
+	try {
+		// check if the request was made by an authorized user
+		const user = request.user;
+		if (!user) {
+			throw new UnauthorizedUserError();
+		}
+		// get the search_term query param
+		const { search_term: searchTerm } = request.query;
+		// if no search term is provided then respond with an empty array
+		if (!searchTerm) response.json([]);
+		// get the appointments based on the search term
+		const sql = `
+			SELECT * FROM appointment
+			WHERE full_name LIKE ${pool.escape(`%${searchTerm}%`)}
+		`;
+		const [appointments] = await pool.query(sql);
+		response.json(appointments);
+	} catch (error) {
+		next(error);
+	}
+}
+
 export async function addAppointment(request, response, next) {
 	try {
 		// check if the request was made by an authorized user
