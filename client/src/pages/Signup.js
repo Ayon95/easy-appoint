@@ -152,7 +152,7 @@ function Signup() {
 
 const SignupFormContainer = styled('div')(({ theme }) => ({
 	padding: theme.spacing(stylesConfig.formContainerPadding),
-	minHeight: '81.9vh',
+	minHeight: '85vh',
 	display: 'flex',
 	justifyContent: 'center',
 	alignItems: 'center',
