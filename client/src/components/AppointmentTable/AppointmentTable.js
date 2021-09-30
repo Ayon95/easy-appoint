@@ -6,6 +6,7 @@ import TableBodyComponent from './TableBodyComponent';
 import TableHeadComponent from './TableHeadComponent';
 import { AuthContext } from './../../contexts/AuthContext';
 import Pagination from './Pagination';
+import { setQueryRetry } from '../../utils/helpers';
 
 /* How the table pagination will work:
 
@@ -41,8 +42,12 @@ function AppointmentTable({ searchedAppointments }) {
 	// query that will be responsible for fetching appointments from the server
 	const requestData = { page, rowsPerPage, token: user.token };
 	// the returned data will be an object that looks like this -> {totalAppointments: , appointments: [...]}
-	const { data, isSuccess } = useQuery(['appointments', requestData], () =>
-		getAppointments(requestData)
+	const { data, isSuccess } = useQuery(
+		['appointments', requestData],
+		() => getAppointments(requestData),
+		{
+			retry: setQueryRetry,
+		}
 	);
 	return (
 		<Paper elevation={0}>

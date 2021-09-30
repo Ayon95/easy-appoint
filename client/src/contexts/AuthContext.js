@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { checkAndHandleApiErrors, checkAndHandleNetworkError } from '../utils/helpers';
 
 const baseUrl = 'http://localhost:5000/user';
 export const AuthContext = React.createContext();
@@ -17,6 +18,9 @@ function AuthContextProvider({ children }) {
 	// this async function will send a POST request to the server for user signup
 	async function signUp(userData) {
 		try {
+			// check for network error (if there is any internet connection)
+			checkAndHandleNetworkError();
+
 			setIsLoading(true);
 			setError('');
 			const response = await fetch(`${baseUrl}/signup`, {
@@ -24,12 +28,8 @@ function AuthContextProvider({ children }) {
 				headers: { 'Content-Type': 'application/json' },
 				body: JSON.stringify(userData),
 			});
-			// in case an error occurs
-			if (!response.ok) {
-				// the server will respond with an error object containing an error message
-				const error = await response.json();
-				throw new Error(error.errorMessage);
-			}
+			// in case an error occurs while processing the API call
+			await checkAndHandleApiErrors(response);
 			// if we reach this point, then it means that the request was successful
 			const data = await response.json();
 			// save the user data to local storage
@@ -46,6 +46,8 @@ function AuthContextProvider({ children }) {
 	// this async function will send a POST request for user login
 	async function logIn(username, password) {
 		try {
+			checkAndHandleNetworkError();
+
 			setIsLoading(true);
 			setError('');
 			const response = await fetch(`${baseUrl}/login`, {
@@ -54,10 +56,7 @@ function AuthContextProvider({ children }) {
 				body: JSON.stringify({ username, password }),
 			});
 
-			if (!response.ok) {
-				const error = await response.json();
-				throw new Error(error.errorMessage);
-			}
+			await checkAndHandleApiErrors(response);
 
 			const data = await response.json();
 			// save the user data to local storage

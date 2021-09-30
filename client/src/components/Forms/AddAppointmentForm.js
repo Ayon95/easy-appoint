@@ -8,6 +8,7 @@ import { useMutation, useQueryClient } from 'react-query';
 import { addAppointment } from '../../services/appointmentService';
 import { format } from 'date-fns';
 import { AuthContext } from '../../contexts/AuthContext';
+import { setQueryRetry } from '../../utils/helpers';
 
 function AddAppointmentForm() {
 	const formRef = useRef();
@@ -16,6 +17,7 @@ function AddAppointmentForm() {
 	// this mutation will be responsible for sending a POST request to the server for adding an appointment
 	// the requestData object will contain user token and the appointment object
 	const mutation = useMutation(requestData => addAppointment(requestData), {
+		retry: setQueryRetry,
 		// this function will be called after the mutation was performed successfully
 		onSuccess: () => {
 			// invalidate the 'appointments' query so that it re-fetches the updated data

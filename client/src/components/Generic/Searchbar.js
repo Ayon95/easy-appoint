@@ -4,6 +4,7 @@ import React, { useState, useContext } from 'react';
 import { useQuery } from 'react-query';
 import { AuthContext } from './../../contexts/AuthContext';
 import { getAppointmentsBySearch } from '../../services/appointmentService';
+import { setQueryRetry } from '../../utils/helpers';
 
 /* How the appointment search will work:
 
@@ -32,6 +33,7 @@ function Searchbar({ setSearchedAppointments }) {
 		{
 			// we don't want this query to run automatically when the component mounts
 			enabled: false,
+			retry: setQueryRetry,
 			// this data will be the fetched data (an array of appointments matching the search condition)
 			onSuccess: data => {
 				setSearchedAppointments(data);
