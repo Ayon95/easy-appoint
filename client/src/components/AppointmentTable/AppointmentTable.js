@@ -30,7 +30,7 @@ Backend
 
 const columns = ['ID', 'Full name', 'Age', 'Phone number', 'Date', 'Time', 'Actions'];
 
-function AppointmentTable() {
+function AppointmentTable({ searchedAppointments }) {
 	// variables related to pagination
 	// note that page is not zero-based; first page is 1
 	const [page, setPage] = useState(1);
@@ -49,10 +49,15 @@ function AppointmentTable() {
 			<TableContainer>
 				<Table>
 					<TableHeadComponent columns={columns} />
-					{isSuccess && <TableBodyComponent appointments={data.appointments} />}
+					{searchedAppointments.length === 0 && isSuccess && (
+						<TableBodyComponent appointments={data.appointments} />
+					)}
+					{searchedAppointments.length > 0 && (
+						<TableBodyComponent appointments={searchedAppointments} />
+					)}
 				</Table>
 			</TableContainer>
-			{isSuccess && (
+			{searchedAppointments.length === 0 && isSuccess && (
 				<Pagination
 					count={data.totalAppointments}
 					page={page - 1}

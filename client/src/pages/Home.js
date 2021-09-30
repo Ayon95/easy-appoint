@@ -9,8 +9,11 @@ import AppointmentTable from '../components/AppointmentTable/AppointmentTable';
 
 const pageContainerStyles = { minHeight: '80.4vh', paddingX: 2, paddingY: 4 };
 
+// If the user searches for specific appointments, then the table should show those appointments (without any pagination)
+
 function Home() {
 	const [modalIsOpen, setModalIsOpen] = useState(false);
+	const [searchedAppointments, setSearchedAppointments] = useState([]);
 	// when the 'Add Appointment' button is clicked, we have to open the modal that contains a form to add an appointment
 	function openModal() {
 		setModalIsOpen(true);
@@ -36,8 +39,8 @@ function Home() {
 					Add Appointment
 				</Button>
 			</TitleAndButtonContainer>
-			<Searchbar />
-			<AppointmentTable />
+			<Searchbar setSearchedAppointments={setSearchedAppointments} />
+			<AppointmentTable searchedAppointments={searchedAppointments} />
 			{modalIsOpen && (
 				<Modal title="Add Appointment" modalIsOpen={modalIsOpen} closeModal={closeModal}>
 					<AddAppointmentForm />

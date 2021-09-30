@@ -23,6 +23,22 @@ export async function getAppointments(requestData) {
 	return data;
 }
 
+// this function will send a GET request to fetch appointments by a search term
+export async function getAppointmentsBySearch({ searchTerm, token }) {
+	const response = await fetch(`${baseUrl}/search?search_term=${searchTerm}`, {
+		method: 'GET',
+		headers: {
+			Authorization: `Bearer ${token}`,
+		},
+	});
+	if (!response.ok) {
+		const error = await response.json();
+		throw new Error(error.errorMessage);
+	}
+	const data = await response.json();
+	return data;
+}
+
 // this function will send a POST request to the server for adding an appointment
 export async function addAppointment(requestData) {
 	const response = await fetch(baseUrl, {
