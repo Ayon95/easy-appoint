@@ -60,7 +60,7 @@ export async function updateAppointment({ token, appointment }) {
 		},
 		body: JSON.stringify(appointment),
 	});
-	await checkAndHandleApiErrors();
+	await checkAndHandleApiErrors(response);
 	const data = await response.json();
 	return data;
 }

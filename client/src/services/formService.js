@@ -25,7 +25,7 @@ export const signupValidationSchema = Yup.object({
 
 /* Full name can only have letters and spaces.
 Phone number needs to be at least 7 digits long and cannot be more than 15 digits in length. */
-export const addAppointmentValidationSchema = Yup.object({
+export const appointmentFormValidationSchema = Yup.object({
 	fullName: Yup.string()
 		.required('Full name is required')
 		.matches(/^[a-z\s]+$/i, 'Not a valid name'),
