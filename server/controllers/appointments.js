@@ -61,8 +61,18 @@ export async function getAppointmentsBySearch(request, response, next) {
 		if (!searchTerm) response.json([]);
 		// get the appointments based on the search term
 		const sql = `
-			SELECT * FROM appointment
+			SELECT
+				appointment_id,
+				full_name,
+				age,
+				phone_number,
+				DATE_FORMAT(date, '%a %b %e, %Y') AS date,
+				TIME_FORMAT(time, '%l:%i %p') AS time
+			FROM appointment
 			WHERE full_name LIKE ${pool.escape(`%${searchTerm}%`)}
+			ORDER BY
+				appointment.date DESC,
+				appointment.time DESC
 		`;
 		const [appointments] = await pool.query(sql);
 		response.json(appointments);
