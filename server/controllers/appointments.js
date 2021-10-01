@@ -33,7 +33,7 @@ export async function getAppointments(request, response, next) {
 				age, 
 				phone_number,
 				DATE_FORMAT(date, '%a %b %e, %Y') AS date,
-				TIME_FORMAT(time, '%h:%i %p') AS time
+				TIME_FORMAT(time, '%l:%i %p') AS time
 			FROM appointment
 			ORDER BY
 				appointment.date DESC,
@@ -100,16 +100,58 @@ export async function addAppointment(request, response, next) {
                 ${pool.escape(body.userId)}
             )
         `;
-		await pool.query(sql);
+		const [result] = await pool.query(sql);
 
 		// send a success response if the database query was successful
 		response.json({
+			appointmentId: result.insertId,
 			fullName: body.fullName,
 			age: body.age,
 			phoneNumber: body.phoneNumber,
 			date: body.date,
 			time: body.time,
 			userId: body.userId,
+		});
+	} catch (error) {
+		next(error);
+	}
+}
+
+export async function updateAppointment(request, response, next) {
+	try {
+		const user = request.user;
+		if (!user) {
+			throw new UnauthorizedUserError();
+		}
+		// get the id of the target appointment from the url
+		const { appointmentId } = request.params;
+		const { body } = request;
+		// define a query to update the target appointment
+		const sqlUpdateAppointment = `
+			UPDATE appointment
+			SET
+				full_name = ${pool.escape(body.fullName)},
+				age = ${pool.escape(body.age)},
+				phone_number = ${pool.escape(body.phoneNumber)},
+				date = ${pool.escape(body.date)},
+				time = ${pool.escape(body.time)}
+			WHERE appointment_id = ${pool.escape(appointmentId)}
+		`;
+		await pool.query(sqlUpdateAppointment);
+		// get the updated appointment
+		const [result] = await pool.query(
+			`SELECT * FROM appointment WHERE appointment_id = ${pool.escape(appointmentId)}`
+		);
+		const updatedAppointment = result[0];
+
+		response.json({
+			appointmentId: Number.parseFloat(appointmentId),
+			fullName: updatedAppointment.full_name,
+			age: updatedAppointment.age,
+			phoneNumber: updatedAppointment.phone_number,
+			date: updatedAppointment.date,
+			time: updatedAppointment.time,
+			userId: user.userId,
 		});
 	} catch (error) {
 		next(error);

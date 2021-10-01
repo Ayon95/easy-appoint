@@ -4,6 +4,7 @@ import {
 	getAppointments,
 	getAppointmentsBySearch,
 	removeAppointment,
+	updateAppointment,
 } from '../controllers/appointments.js';
 import authorizeUser from './../middleware/authorizeUser.js';
 
@@ -17,6 +18,9 @@ router.get('/search', authorizeUser, getAppointmentsBySearch);
 
 // route for POST request to add an appointment
 router.post('/', authorizeUser, addAppointment);
+
+// route for PUT request to update an appointment
+router.put('/:appointmentId', authorizeUser, updateAppointment);
 
 // route for DELETE request to remove an appointment
 router.delete('/:appointmentId', authorizeUser, removeAppointment);

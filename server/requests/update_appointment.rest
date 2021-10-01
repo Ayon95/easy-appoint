@@ -1,0 +1,11 @@
+PUT http://localhost:5000/appointments/6
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjE5LCJpYXQiOjE2MzMwNDU3NzcsImV4cCI6MTYzMzA2Mzc3N30.AWzbeSibvPl3h2b-L68aPo81RO7_TGVi6WircDMi9mI
+
+{
+    "fullName": "Michael Peterson",
+    "age": 38,
+    "phoneNumber": "1236547944",
+    "date": "2021-10-05",
+    "time": "18:00:00"
+}

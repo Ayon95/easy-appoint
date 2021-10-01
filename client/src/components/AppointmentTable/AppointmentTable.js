@@ -49,6 +49,8 @@ function AppointmentTable({ searchedAppointments }) {
 			retry: setQueryRetry,
 		}
 	);
+
+	console.log(data);
 	return (
 		<Paper elevation={0}>
 			<TableContainer>
