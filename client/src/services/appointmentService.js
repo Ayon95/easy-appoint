@@ -49,13 +49,29 @@ export async function addAppointment(requestData) {
 	return data;
 }
 
-// this function will send a DELETE request to the server to delete an appointment
-export async function removeAppointment(requestData) {
+// this function will send a PUT request to update an appointment
+export async function updateAppointment({ token, appointment }) {
 	checkAndHandleNetworkError();
-	const response = await fetch(`${baseUrl}/${requestData.appointmentId}`, {
+	const response = await fetch(`${baseUrl}/${appointment.appointmentId}`, {
+		method: 'PUT',
+		headers: {
+			'Content-Type': 'application/json',
+			Authorization: `Bearer ${token}`,
+		},
+		body: JSON.stringify(appointment),
+	});
+	await checkAndHandleApiErrors();
+	const data = await response.json();
+	return data;
+}
+
+// this function will send a DELETE request to the server to delete an appointment
+export async function removeAppointment({ token, appointmentId }) {
+	checkAndHandleNetworkError();
+	const response = await fetch(`${baseUrl}/${appointmentId}`, {
 		method: 'DELETE',
 		headers: {
-			Authorization: `Bearer ${requestData.token}`,
+			Authorization: `Bearer ${token}`,
 		},
 	});
 	await checkAndHandleApiErrors(response);

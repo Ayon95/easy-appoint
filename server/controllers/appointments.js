@@ -103,7 +103,7 @@ export async function addAppointment(request, response, next) {
 		const [result] = await pool.query(sql);
 
 		// send a success response if the database query was successful
-		response.json({
+		response.status(201).json({
 			appointmentId: result.insertId,
 			fullName: body.fullName,
 			age: body.age,

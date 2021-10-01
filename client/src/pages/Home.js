@@ -14,6 +14,7 @@ const pageContainerStyles = { minHeight: '80.4vh', paddingX: 2, paddingY: 4 };
 function Home() {
 	const [modalIsOpen, setModalIsOpen] = useState(false);
 	const [searchedAppointments, setSearchedAppointments] = useState([]);
+	const [appointmentToUpdate, setAppointmentToUpdate] = useState(null);
 	// when the 'Add Appointment' button is clicked, we have to open the modal that contains a form to add an appointment
 	function openModal() {
 		setModalIsOpen(true);
@@ -40,7 +41,11 @@ function Home() {
 				</Button>
 			</TitleAndButtonContainer>
 			<Searchbar setSearchedAppointments={setSearchedAppointments} />
-			<AppointmentTable searchedAppointments={searchedAppointments} />
+			<AppointmentTable
+				searchedAppointments={searchedAppointments}
+				setAppointmentToUpdate={setAppointmentToUpdate}
+				openModal={openModal}
+			/>
 			{modalIsOpen && (
 				<Modal title="Add Appointment" modalIsOpen={modalIsOpen} closeModal={closeModal}>
 					<AddAppointmentForm />
