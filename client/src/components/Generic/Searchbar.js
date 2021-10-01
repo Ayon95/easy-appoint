@@ -1,6 +1,6 @@
 import { SearchOutlined } from '@mui/icons-material';
 import { Button, Grid, InputAdornment, TextField, Typography } from '@mui/material';
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import { useQuery } from 'react-query';
 import { AuthContext } from './../../contexts/AuthContext';
 import { getAppointmentsBySearch } from '../../services/appointmentService';
@@ -21,7 +21,9 @@ Backend
 
 */
 
-function Searchbar({ setSearchedAppointments }) {
+function Searchbar(props) {
+	const { setSearchedAppointments, searchedAppointmentUpdated, setSearchedAppointmentUpdated } =
+		props;
 	const { user } = useContext(AuthContext);
 	const [searchTerm, setSearchTerm] = useState('');
 	const [searchResultMessage, setSearchResultMessage] = useState('');
@@ -43,6 +45,15 @@ function Searchbar({ setSearchedAppointments }) {
 			},
 		}
 	);
+
+	// Need to do a refetch whenever a searched appointment is updated
+	useEffect(() => {
+		if (searchedAppointmentUpdated) {
+			refetch();
+			// reset setSearchedAppointmentUpdated to false
+			setSearchedAppointmentUpdated(false);
+		}
+	}, [searchedAppointmentUpdated, refetch, setSearchedAppointmentUpdated]);
 
 	function handleClickSearch() {
 		// if there is no search term, then don't run the query

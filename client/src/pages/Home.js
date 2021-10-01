@@ -16,6 +16,10 @@ function Home() {
 	const [modalIsOpen, setModalIsOpen] = useState(false);
 	const [searchedAppointments, setSearchedAppointments] = useState([]);
 	const [appointmentToUpdate, setAppointmentToUpdate] = useState(null);
+	// we will use this state variable to determine whether or not a searched appointment is updated
+	// if a searched appointment is updated, then we will have to refetch the 'appointmentsSearch' query to get the updated search results
+	// the automatic refetch of 'appointmentsSearch' query is disabled, so we need this condition to do manual refetch when a searched appointment is updated
+	const [searchedAppointmentUpdated, setSearchedAppointmentUpdated] = useState(false);
 	// when the 'Add Appointment' button is clicked, we have to open the modal that contains a form to add an appointment
 	function openModal() {
 		setModalIsOpen(true);
@@ -43,7 +47,11 @@ function Home() {
 					Add Appointment
 				</Button>
 			</TitleAndButtonContainer>
-			<Searchbar setSearchedAppointments={setSearchedAppointments} />
+			<Searchbar
+				setSearchedAppointments={setSearchedAppointments}
+				searchedAppointmentUpdated={searchedAppointmentUpdated}
+				setSearchedAppointmentUpdated={setSearchedAppointmentUpdated}
+			/>
 			<AppointmentTable
 				searchedAppointments={searchedAppointments}
 				setAppointmentToUpdate={setAppointmentToUpdate}
@@ -56,7 +64,11 @@ function Home() {
 					closeModal={closeModal}
 				>
 					{appointmentToUpdate ? (
-						<UpdateAppointmentForm appointmentToUpdate={appointmentToUpdate} />
+						<UpdateAppointmentForm
+							appointmentToUpdate={appointmentToUpdate}
+							searchedAppointments={searchedAppointments}
+							setSearchedAppointmentUpdated={setSearchedAppointmentUpdated}
+						/>
 					) : (
 						<AddAppointmentForm />
 					)}

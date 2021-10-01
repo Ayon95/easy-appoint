@@ -6,7 +6,8 @@ import { updateAppointment } from '../../services/appointmentService';
 import { setQueryRetry } from '../../utils/helpers';
 import AppointmentForm from './AppointmentForm';
 
-function UpdateAppointmentForm({ appointmentToUpdate }) {
+function UpdateAppointmentForm(props) {
+	const { appointmentToUpdate, searchedAppointments, setSearchedAppointmentUpdated } = props;
 	const { appointmentId, fullName, age, phoneNumber, date, time } = appointmentToUpdate;
 	const initialValues = {
 		fullName,
@@ -30,6 +31,9 @@ function UpdateAppointmentForm({ appointmentToUpdate }) {
 		onSuccess: () => {
 			// invalidate the 'appointments' query so that it re-fetches the updated data
 			queryClient.invalidateQueries('appointments');
+			// if currently there are searched appointments (table is showing searched appointments), then that means the user has updated a searched appointment
+			// in that case, we have to notify Searchbar when it should manually refetch the 'appointmentsSearch' query (in Searchbar.js)
+			if (searchedAppointments.length > 0) setSearchedAppointmentUpdated(true);
 			// reset the form with these input values
 			formRef.current.resetForm({
 				values: {
