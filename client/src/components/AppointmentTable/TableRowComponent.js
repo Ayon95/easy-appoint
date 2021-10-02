@@ -1,10 +1,20 @@
 import { DeleteOutlined, EditOutlined } from '@mui/icons-material';
 import { IconButton, TableCell, TableRow } from '@mui/material';
+import { yellow } from '@mui/material/colors';
+import { isToday } from 'date-fns';
 import React, { useContext } from 'react';
 import { useMutation, useQueryClient } from 'react-query';
 import { AuthContext } from '../../contexts/AuthContext';
 import { removeAppointment } from '../../services/appointmentService';
 import { setQueryRetry } from '../../utils/helpers';
+
+// these styles will be added to the appointments whose dates are equal to today's date
+const isTodayStyles = {
+	backgroundColor: yellow[100],
+	'& > *': {
+		fontWeight: 'bold',
+	},
+};
 
 function TableRowComponent({ appointment, setAppointmentToUpdate, openModal, showAlert }) {
 	const { appointment_id, full_name, age, phone_number, date, time } = appointment;
@@ -44,7 +54,7 @@ function TableRowComponent({ appointment, setAppointmentToUpdate, openModal, sho
 		openModal();
 	}
 	return (
-		<TableRow>
+		<TableRow sx={isToday(new Date(date)) && isTodayStyles}>
 			<TableCell>{appointment_id}</TableCell>
 			<TableCell>{full_name}</TableCell>
 			<TableCell>{age}</TableCell>
