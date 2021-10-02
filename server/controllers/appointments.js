@@ -1,5 +1,6 @@
 import { NonexistentResourceError, UnauthorizedUserError } from '../utils/error.js';
 import pool from '../utils/db.js';
+import { toSnakeCase } from '../utils/helpers.js';
 
 export async function getAppointments(request, response, next) {
 	try {
@@ -9,22 +10,36 @@ export async function getAppointments(request, response, next) {
 			throw new UnauthorizedUserError();
 		}
 		// getting the query params
+		const sortBy = request.query.sort_by ? toSnakeCase(request.query.sort_by) : 'date';
+		const sortDirection = request.query.sort_direction
+			? request.query.sort_direction.toUpperCase()
+			: 'DESC';
 		let page = Number.parseFloat(request.query.page);
 		let rowsPerPage = Number.parseFloat(request.query.rows_per_page);
+
 		// find the total number of appointments
 		const [appointmentsCountResult] = await pool.query(
 			'SELECT COUNT(appointment_id) AS count FROM appointment'
 		);
 		const totalAppointments = appointmentsCountResult[0].count;
+
 		// if valid rowsPerPage is not provided, then set it to 25
 		if (!rowsPerPage || rowsPerPage === 0) rowsPerPage = 25;
 		// find the total number of pages
 		const totalPages = Math.ceil(totalAppointments / rowsPerPage);
 		// if a valid page number is not provided, then set it to 1
 		if (!page || page < 1 || page > totalPages) page = 1;
+
 		// calculate the start and end indexes (first page is 1)
 		const startIndex = (page - 1) * rowsPerPage;
 		const endIndex = page * rowsPerPage;
+
+		// determine the sql ORDER BY columns
+		const orderByColumns =
+			sortBy === 'date'
+				? `appointment.date ${sortDirection}, appointment.time ${sortDirection}`
+				: `appointment.${sortBy} ${sortDirection}`;
+
 		// get the appointments for the specified page
 		const sqlGetAppointments = `
 			SELECT
@@ -35,13 +50,10 @@ export async function getAppointments(request, response, next) {
 				DATE_FORMAT(date, '%a %b %e, %Y') AS date,
 				TIME_FORMAT(time, '%l:%i %p') AS time
 			FROM appointment
-			ORDER BY
-				appointment.date DESC,
-				appointment.time DESC
+			ORDER BY ${pool.escape(orderByColumns).replace(/\'/g, '')}
 			LIMIT ${pool.escape(startIndex)}, ${pool.escape(endIndex)}
 		`;
 		const [appointments] = await pool.query(sqlGetAppointments);
-
 		response.json({ totalAppointments, appointments });
 	} catch (error) {
 		next(error);

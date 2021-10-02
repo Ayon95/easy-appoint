@@ -1,2 +1,2 @@
-GET http://localhost:5000/appointments?page=1&rows_per_page=25
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjE5LCJpYXQiOjE2MzI5MzYxNDEsImV4cCI6MTYzMjk1NDE0MX0.WpO03OhG2RlARcHbAP674hhgbyyJevlfFhpUipvawFA
+GET http://localhost:5000/appointments?page=1&rows_per_page=25&sort_by=age&sort_direction=asc
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjE5LCJpYXQiOjE2MzMxOTE3MjksImV4cCI6MTYzMzIwOTcyOX0.pN7xgxkIfiaBptx2TE64GwX31OybmTTIJHHr7Ieg0Dk
