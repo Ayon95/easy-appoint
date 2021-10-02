@@ -6,7 +6,7 @@ import { setQueryRetry } from '../../utils/helpers';
 import AppointmentForm from './AppointmentForm';
 import { AuthContext } from '../../contexts/AuthContext';
 
-function AddAppointmentForm() {
+function AddAppointmentForm({ showAlert }) {
 	const initialValues = {
 		fullName: '',
 		age: '',
@@ -19,7 +19,7 @@ function AddAppointmentForm() {
 	const { user } = useContext(AuthContext);
 	// This mutation will be responsible for sending a POST request to create an appointment
 	// The requestData object will contain user token and the appointment object
-	const mutation = useMutation(requestData => addAppointment(requestData), {
+	const { mutate, isLoading } = useMutation(requestData => addAppointment(requestData), {
 		retry: setQueryRetry,
 		// this function will be called after the mutation was performed successfully
 		onSuccess: () => {
@@ -27,7 +27,11 @@ function AddAppointmentForm() {
 			queryClient.invalidateQueries('appointments');
 			// reset the form
 			formRef.current.resetForm();
+			// show a success alert
+			showAlert('success', 'Appointment added successfully!');
 		},
+		// this function will be called when an error occurs while performing the mutation
+		onError: error => showAlert('error', error.message),
 	});
 
 	function handleSubmit(values) {
@@ -41,16 +45,18 @@ function AddAppointmentForm() {
 			userId: user.userId,
 		};
 		// this will trigger the mutation function that will send a POST request to the server to add an appointment
-		mutation.mutate({ token: user.token, appointment });
+		mutate({ token: user.token, appointment });
 	}
 	return (
-		<AppointmentForm
-			initialValues={initialValues}
-			handleSubmit={handleSubmit}
-			buttonText="Add Appointment"
-			isLoading={mutation.isLoading}
-			ref={formRef}
-		/>
+		<>
+			<AppointmentForm
+				initialValues={initialValues}
+				handleSubmit={handleSubmit}
+				buttonText="Add Appointment"
+				isLoading={isLoading}
+				ref={formRef}
+			/>
+		</>
 	);
 }
 

@@ -7,12 +7,13 @@ import Searchbar from '../components/Generic/Searchbar';
 import AppointmentTable from '../components/AppointmentTable/AppointmentTable';
 import UpdateAppointmentForm from '../components/Forms/UpdateAppointmentForm';
 import AddAppointmentForm from '../components/Forms/AddAppointmentForm';
+import withAlert from './../components/HOCs/withAlert';
 
 const pageContainerStyles = { minHeight: '80.4vh', paddingX: 2, paddingY: 4 };
 
 // If the user searches for specific appointments, then the table should show those appointments (without any pagination)
 
-function Home() {
+function Home({ showAlert }) {
 	const [modalIsOpen, setModalIsOpen] = useState(false);
 	const [searchedAppointments, setSearchedAppointments] = useState([]);
 	const [appointmentToUpdate, setAppointmentToUpdate] = useState(null);
@@ -56,6 +57,7 @@ function Home() {
 				searchedAppointments={searchedAppointments}
 				setAppointmentToUpdate={setAppointmentToUpdate}
 				openModal={openModal}
+				showAlert={showAlert}
 			/>
 			{modalIsOpen && (
 				<Modal
@@ -65,12 +67,13 @@ function Home() {
 				>
 					{appointmentToUpdate ? (
 						<UpdateAppointmentForm
+							showAlert={showAlert}
 							appointmentToUpdate={appointmentToUpdate}
 							searchedAppointments={searchedAppointments}
 							setSearchedAppointmentUpdated={setSearchedAppointmentUpdated}
 						/>
 					) : (
-						<AddAppointmentForm />
+						<AddAppointmentForm showAlert={showAlert} />
 					)}
 				</Modal>
 			)}
@@ -78,7 +81,7 @@ function Home() {
 	);
 }
 
-export default Home;
+export default withAlert(Home);
 
 const TitleAndButtonContainer = styled('div')(({ theme }) => ({
 	display: 'flex',

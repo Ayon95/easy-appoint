@@ -7,23 +7,31 @@ import { Grid, Link, Typography } from '@mui/material';
 import { Link as RouterLink, useHistory } from 'react-router-dom';
 import stylesConfig from '../utils/stylesConfig';
 import { signupValidationSchema } from '../services/formService';
-import AlertComponent from '../components/Generic/AlertComponent';
 import { AuthContext } from '../contexts/AuthContext';
+import withAlert from '../components/HOCs/withAlert';
 
-function Signup() {
+function Signup({ showAlert }) {
+	const [signupProcessed, setSignupProcessed] = useState(false);
 	const { user, signUp, isLoading, error } = useContext(AuthContext);
-	const [alertIsOpen, setAlertIsOpen] = useState(false);
 	const formRef = useRef();
 	const history = useHistory();
-
-	function closeAlert() {
-		setAlertIsOpen(false);
-	}
 
 	// take the user to the Home page if the signup process was successful (and there is a user)
 	useEffect(() => {
 		if (user) history.push('/');
 	}, [user, history]);
+
+	// if there is an error after form submission, then show error alert, otherwise show success alert
+	// To show the correct type of alert, we need to listen for changes in error in a useEffect
+	// we cannot simply show the alert in handleSubmit after signUp because setting the error state is asynchronous
+	useEffect(() => {
+		// we need to show an alert only after the signup form is submitted and the request has been processed
+		if (!signupProcessed) return;
+		if (error) showAlert('error', error);
+		else showAlert('success', 'Account created successfully!');
+		// alert has been shown so reset signupProcessed to false
+		setSignupProcessed(false);
+	}, [signupProcessed, error, showAlert]);
 
 	async function handleSubmit(values) {
 		const userData = {
@@ -34,8 +42,7 @@ function Signup() {
 		};
 		// this will result in sending a POST request to the server for user signup
 		await signUp(userData);
-		// need to show an alert (if there is any error)
-		setAlertIsOpen(true);
+		setSignupProcessed(true);
 	}
 	return (
 		<SignupFormContainer>
@@ -127,22 +134,6 @@ function Signup() {
 								Log in
 							</Link>
 						</Typography>
-						{error && (
-							<AlertComponent
-								type="error"
-								message={error}
-								isOpen={alertIsOpen}
-								closeAlert={closeAlert}
-							/>
-						)}
-						{!error && (
-							<AlertComponent
-								type="success"
-								message="Account created successfully!"
-								isOpen={alertIsOpen}
-								closeAlert={closeAlert}
-							/>
-						)}
 					</Form>
 				)}
 			</Formik>
@@ -158,4 +149,4 @@ const SignupFormContainer = styled('div')(({ theme }) => ({
 	alignItems: 'center',
 }));
 
-export default Signup;
+export default withAlert(Signup);

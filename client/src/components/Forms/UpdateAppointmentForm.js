@@ -7,7 +7,8 @@ import { setQueryRetry } from '../../utils/helpers';
 import AppointmentForm from './AppointmentForm';
 
 function UpdateAppointmentForm(props) {
-	const { appointmentToUpdate, searchedAppointments, setSearchedAppointmentUpdated } = props;
+	const { showAlert, appointmentToUpdate, searchedAppointments, setSearchedAppointmentUpdated } =
+		props;
 	const { appointmentId, fullName, age, phoneNumber, date, time } = appointmentToUpdate;
 	const initialValues = {
 		fullName,
@@ -44,7 +45,10 @@ function UpdateAppointmentForm(props) {
 					time: Date.now(),
 				},
 			});
+			// show success alert
+			showAlert('success', 'Appointment updated successfully!');
 		},
+		onError: error => showAlert('error', error.message),
 	});
 
 	function handleSubmit(values) {

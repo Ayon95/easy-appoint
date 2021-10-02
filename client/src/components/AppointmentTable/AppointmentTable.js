@@ -31,7 +31,7 @@ Backend
 
 const columns = ['ID', 'Full name', 'Age', 'Phone number', 'Date', 'Time', 'Actions'];
 
-function AppointmentTable({ searchedAppointments, setAppointmentToUpdate, openModal }) {
+function AppointmentTable({ searchedAppointments, setAppointmentToUpdate, openModal, showAlert }) {
 	// variables related to pagination
 	// note that page is not zero-based; first page is 1
 	const [page, setPage] = useState(1);
@@ -60,6 +60,7 @@ function AppointmentTable({ searchedAppointments, setAppointmentToUpdate, openMo
 							appointments={data.appointments}
 							setAppointmentToUpdate={setAppointmentToUpdate}
 							openModal={openModal}
+							showAlert={showAlert}
 						/>
 					)}
 					{searchedAppointments.length > 0 && (
@@ -67,6 +68,7 @@ function AppointmentTable({ searchedAppointments, setAppointmentToUpdate, openMo
 							appointments={searchedAppointments}
 							setAppointmentToUpdate={setAppointmentToUpdate}
 							openModal={openModal}
+							showAlert={showAlert}
 						/>
 					)}
 				</Table>
