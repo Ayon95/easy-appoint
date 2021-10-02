@@ -4,13 +4,14 @@ const baseUrl = 'http://localhost:5000/appointments';
 
 // this function will send a GET request to the server to fetch appointments
 export async function getAppointments(requestData) {
+	const { page, rowsPerPage, sortBy, sortDirection, token } = requestData;
 	checkAndHandleNetworkError();
 	const response = await fetch(
-		`${baseUrl}?page=${requestData.page}&rows_per_page=${requestData.rowsPerPage}`,
+		`${baseUrl}?page=${page}&rows_per_page=${rowsPerPage}&sort_by=${sortBy}&sort_direction=${sortDirection}`,
 		{
 			method: 'GET',
 			headers: {
-				Authorization: `Bearer ${requestData.token}`,
+				Authorization: `Bearer ${token}`,
 			},
 		}
 	);

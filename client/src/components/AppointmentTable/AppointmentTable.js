@@ -28,10 +28,20 @@ Backend
 	- the fetched data
 
 */
-
-const columns = ['ID', 'Full name', 'Age', 'Phone number', 'Date', 'Time', 'Actions'];
+const columns = [
+	{ name: 'id', label: 'ID', sortingIsDisabled: true },
+	{ name: 'fullName', label: 'Full name' },
+	{ name: 'age', label: 'Age' },
+	{ name: 'phoneNumber', label: 'Phone number', sortingIsDisabled: true },
+	{ name: 'date', label: 'Date' },
+	{ name: 'time', label: 'Time', sortingIsDisabled: true },
+	{ name: 'actions', label: 'Actions', sortingIsDisabled: true },
+];
 
 function AppointmentTable({ searchedAppointments, setAppointmentToUpdate, openModal, showAlert }) {
+	// variables related to sorting
+	const [sortBy, setSortBy] = useState('date');
+	const [sortDirection, setSortDirection] = useState('desc');
 	// variables related to pagination
 	// note that page is not zero-based; first page is 1
 	const [page, setPage] = useState(1);
@@ -40,7 +50,13 @@ function AppointmentTable({ searchedAppointments, setAppointmentToUpdate, openMo
 
 	const { user } = useContext(AuthContext);
 	// query that will be responsible for fetching appointments from the server
-	const requestData = { page, rowsPerPage, token: user.token };
+	const requestData = {
+		sortBy,
+		sortDirection,
+		page,
+		rowsPerPage,
+		token: user.token,
+	};
 	// the returned data will be an object that looks like this -> {totalAppointments: , appointments: [...]}
 	const { data, isSuccess } = useQuery(
 		['appointments', requestData],
@@ -50,11 +66,29 @@ function AppointmentTable({ searchedAppointments, setAppointmentToUpdate, openMo
 		}
 	);
 
+	// this function will be executed whenever a sortable column is clicked
+	function handleClickSort(column) {
+		const activeColumnClicked = column.name === sortBy;
+		// if the active column (table is currently sorted by this column) is clicked, then toggle its sort direction
+		if (activeColumnClicked) setSortDirection(sortDirection === 'asc' ? 'desc' : 'asc');
+		// if a column other than the current active column is clicked, then set its sort direction to 'desc'
+		// by default, sort direction of inactive columns will be 'asc'
+		else {
+			setSortBy(column.name);
+			setSortDirection('desc');
+		}
+	}
+
 	return (
 		<Paper elevation={0}>
 			<TableContainer>
 				<Table>
-					<TableHeadComponent columns={columns} />
+					<TableHeadComponent
+						columns={columns}
+						sortBy={sortBy}
+						sortDirection={sortDirection}
+						handleClickSort={handleClickSort}
+					/>
 					{searchedAppointments.length === 0 && isSuccess && (
 						<TableBodyComponent
 							appointments={data.appointments}
