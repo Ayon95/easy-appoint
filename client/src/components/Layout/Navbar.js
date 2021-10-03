@@ -21,7 +21,7 @@ function Navbar() {
 	return (
 		<AppBar position="static" elevation={0}>
 			<Toolbar sx={navbarStyles}>
-				<Typography variant="h5">EasyAppoint</Typography>
+				<Typography variant="h5">{user ? `Hello, ${user.username}` : 'EasyAppoint'}</Typography>
 				{user && (
 					<Button
 						type="button"

@@ -9,7 +9,6 @@ import Pagination from './Pagination';
 import { setQueryRetry } from '../../utils/helpers';
 
 /* How the table pagination will work:
-
 Front-end
 - send page number, and rows per page to the backend as query params
 - whenever page number, or rows per page changes, send a request to fetch data according to the new pagination settings
@@ -19,14 +18,25 @@ Check Pagination component
 Backend
 - find the total number of records
 - then find the total number of pages -> Math.ceil(totalNumRecords / rowsPerPage)
-- if the page number < 1 OR page number > totalNumPages, then that page number is invalid (throw error)
+- if an invalid page number is provided then the page number will be set to 1
 - calculate the start index -> (pageNum - 1) * rowsPerPage
 - calculate the end index -> pageNum * rowsPerPage
 - make the query to the database to fetch a fixed number of records -> LIMIT (startIndex, endIndex)
 - send the response to the front-end containing the following things
 	- total number of records in the database table
 	- the fetched data
+*/
 
+/* How table sorting will work
+- the rows can be sorted by date, full name, or age
+- by default, the rows will be sorted by date in descending order (newest to oldest appointments)
+- when searched appointments are being shown, sorting will be disabled
+
+Front-end
+- sorting information such as, sortBy and sortDirection will be sent to the backend as query params
+
+Backend
+- the server will extract those query parameters and use them in the database query
 */
 const columns = [
 	{ name: 'id', label: 'ID', sortingIsDisabled: true },
