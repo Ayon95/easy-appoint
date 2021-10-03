@@ -8,16 +8,22 @@ const tableCellStyles = {
 	color: 'primary.dark',
 };
 
-function TableHeadComponent({ columns, sortBy, sortDirection, handleClickSort }) {
+// sorting should be disabled when searched appointments are being shown or sorting is disabled for a particular column
+
+function TableHeadComponent(props) {
+	const { columns, sortBy, sortDirection, handleClickSort, searchedAppointments } = props;
 	return (
 		<TableHead sx={{ backgroundColor: `${indigo[100]}` }}>
 			<TableRow>
 				{columns.map(column => {
-					return column.sortingIsDisabled ? (
-						<TableCell key={column.name} sx={tableCellStyles}>
-							{column.label}
-						</TableCell>
-					) : (
+					if (searchedAppointments.length > 0 || column.sortingIsDisabled) {
+						return (
+							<TableCell key={column.name} sx={tableCellStyles}>
+								{column.label}
+							</TableCell>
+						);
+					}
+					return (
 						<TableCell key={column.name} sx={tableCellStyles}>
 							<TableSortLabel
 								active={column.name === sortBy}

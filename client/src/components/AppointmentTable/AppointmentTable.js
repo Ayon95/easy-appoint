@@ -88,6 +88,7 @@ function AppointmentTable({ searchedAppointments, setAppointmentToUpdate, openMo
 						sortBy={sortBy}
 						sortDirection={sortDirection}
 						handleClickSort={handleClickSort}
+						searchedAppointments={searchedAppointments}
 					/>
 					{searchedAppointments.length === 0 && isSuccess && (
 						<TableBodyComponent
