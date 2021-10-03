@@ -1,4 +1,7 @@
 import { NetworkError } from './errors';
+import jwtDecode from 'jwt-decode';
+
+export let logoutTimerId;
 
 // this function determines the query retry (refetch) behavior of React Query
 export function setQueryRetry(_, error) {
@@ -23,4 +26,24 @@ export async function checkAndHandleApiErrors(response) {
 		const error = await response.json();
 		throw new Error(error.errorMessage);
 	}
+}
+
+// this function will calculate the time after which the user's token will expire and set a timer for that
+// the user will be logged out when the timer finishes countdown
+export function startLogoutTimer(token, logOut) {
+	const decodedToken = jwtDecode(token);
+	// calculating the remaining time - the token will expire after this remaining time
+	// the remaining time is equal to the difference between some time in the future (expirationTime) and the current time
+	const remainingTime = decodedToken.exp * 1000 - Date.now();
+	// the timer will finish its countdown after this remainingTime, and the user will be logged out
+	logoutTimerId = setTimeout(logOut, remainingTime);
+}
+
+// this function will check whether the token has expired or not
+// When a user closes the app without logging out, and returns after a while, we have to check whether the token has expired or not
+export function checkExpiredToken(token) {
+	const decodedToken = jwtDecode(token);
+	// if the expiration time (Unix timestamp) is less than the current timestamp, then it means the token has expired
+	// note that the Unix timestamp is in seconds, so it needs to be converted to milliseconds
+	return decodedToken.exp * 1000 < Date.now();
 }

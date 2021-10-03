@@ -1,5 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import { checkAndHandleApiErrors, checkAndHandleNetworkError } from '../utils/helpers';
+import {
+	checkAndHandleApiErrors,
+	checkAndHandleNetworkError,
+	checkExpiredToken,
+	startLogoutTimer,
+} from '../utils/helpers';
 
 const baseUrl = 'http://localhost:5000/user';
 export const AuthContext = React.createContext();
@@ -9,11 +14,29 @@ function AuthContextProvider({ children }) {
 	const [isLoading, setIsLoading] = useState(false);
 	const [error, setError] = useState('');
 
-	// get user from local storage (if any) after this component mounts for the first time (when the app run)
+	// get user from local storage (if any) after this component mounts for the first time (when the app runs)
 	useEffect(() => {
 		const userData = JSON.parse(localStorage.getItem('EasyAppointUser'));
+		if (!userData) return;
+		// check if the token has expired or not
+		const tokenIsExpired = checkExpiredToken(userData.token);
+		// log the user out if the token is expired
+		if (tokenIsExpired) {
+			logOut();
+			return;
+		}
+		// if the token hasn't expired yet, then start a new logout timer with the updated remaining time
+		startLogoutTimer(userData.token, logOut);
 		setUser(userData);
 	}, []);
+
+	// this function logs the user out
+	function logOut() {
+		// remove the token from local storage
+		localStorage.removeItem('EasyAppointUser');
+		// remove user from local state
+		setUser(null);
+	}
 
 	// this async function will send a POST request to the server for user signup
 	async function signUp(userData) {
@@ -34,6 +57,8 @@ function AuthContextProvider({ children }) {
 			const data = await response.json();
 			// save the user data to local storage
 			localStorage.setItem('EasyAppointUser', JSON.stringify(data));
+			// start a timer that will log the user out when the token expires
+			startLogoutTimer(data.token, logOut);
 
 			setIsLoading(false);
 			setUser(data);
@@ -59,8 +84,8 @@ function AuthContextProvider({ children }) {
 			await checkAndHandleApiErrors(response);
 
 			const data = await response.json();
-			// save the user data to local storage
 			localStorage.setItem('EasyAppointUser', JSON.stringify(data));
+			startLogoutTimer(data.token, logOut);
 
 			setIsLoading(false);
 			setUser(data);
@@ -68,14 +93,6 @@ function AuthContextProvider({ children }) {
 			setIsLoading(false);
 			setError(error.message);
 		}
-	}
-
-	// this function logs the user out
-	function logOut() {
-		// remove the token from local storage
-		localStorage.removeItem('EasyAppointUser');
-		// remove user from local state
-		setUser(null);
 	}
 
 	const value = {
