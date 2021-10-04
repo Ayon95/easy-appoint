@@ -10,6 +10,7 @@ import Signup from './pages/Signup';
 import Home from './pages/Home';
 import ProtectedRoute from './components/Generic/ProtectedRoute';
 import AuthContextProvider from './contexts/AuthContext';
+import NotFound from './pages/NotFound';
 
 function App() {
 	return (
@@ -28,6 +29,9 @@ function App() {
 										<Signup />
 									</Route>
 									<ProtectedRoute path="/" exact={true} component={Home} />
+									<Route path="*">
+										<NotFound />
+									</Route>
 								</Switch>
 							</Layout>
 						</div>
