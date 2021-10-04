@@ -1,4 +1,4 @@
-import { Container, Typography, Button } from '@mui/material';
+import { Container, Typography, Button, Grid } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import { Add } from '@mui/icons-material';
 import React, { useState } from 'react';
@@ -34,7 +34,7 @@ function Home({ showAlert }) {
 	return (
 		<Container sx={pageContainerStyles} maxWidth={false}>
 			<TitleAndButtonContainer>
-				<Typography variant="h4" textAlign="center" color="primary">
+				<Typography variant="h4" color="primary" sx={{ marginBottom: { xs: 1.5, sm: 0 } }}>
 					Your Appointments
 				</Typography>
 				<Button
@@ -85,6 +85,7 @@ export default withAlert(Home);
 
 const TitleAndButtonContainer = styled('div')(({ theme }) => ({
 	display: 'flex',
+	flexWrap: 'wrap',
 	justifyContent: 'space-between',
 	marginBottom: theme.spacing(2),
 }));
