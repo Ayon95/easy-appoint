@@ -56,8 +56,8 @@ function AppointmentTable({ searchedAppointments, setAppointmentToUpdate, openMo
 	// variables related to pagination
 	// note that page is not zero-based; first page is 1
 	const [page, setPage] = useState(1);
-	const [rowsPerPage, setRowsPerPage] = useState(5);
-	const rowsPerPageOptions = [5];
+	const [rowsPerPage, setRowsPerPage] = useState(10);
+	const rowsPerPageOptions = [10, 25, 50];
 
 	const { user } = useContext(AuthContext);
 	// query that will be responsible for fetching appointments from the server
@@ -90,9 +90,10 @@ function AppointmentTable({ searchedAppointments, setAppointmentToUpdate, openMo
 		}
 	}
 
+	if (isLoading) return <LoadingSpinner />;
+
 	return (
 		<>
-			{isLoading && <LoadingSpinner />}
 			{data.appointments.length === 0 && (
 				<Typography variant="h5" textAlign="center">
 					You don't have any appointments
