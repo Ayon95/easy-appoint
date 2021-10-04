@@ -2,6 +2,7 @@ import { NetworkError } from './errors';
 import jwtDecode from 'jwt-decode';
 
 export let logoutTimerId;
+export let logoutAlertTimerId;
 
 // this function determines the query retry (refetch) behavior of React Query
 export function setQueryRetry(_, error) {
@@ -37,6 +38,14 @@ export function startLogoutTimer(token, logOut) {
 	const remainingTime = decodedToken.exp * 1000 - Date.now();
 	// the timer will finish its countdown after this remainingTime, and the user will be logged out
 	logoutTimerId = setTimeout(logOut, remainingTime);
+	// this function will start a timer that will show an alert 30s before the user is automatically logged out
+	startLogoutAlertTimer(remainingTime - 30000);
+}
+
+function startLogoutAlertTimer(time) {
+	logoutAlertTimerId = setTimeout(() => {
+		alert('Your session will expire in 30 seconds. Please log in again to start a new session.');
+	}, time);
 }
 
 // this function will check whether the token has expired or not

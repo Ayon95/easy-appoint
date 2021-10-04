@@ -2,7 +2,7 @@ import React, { useContext } from 'react';
 import { AppBar, Button, Toolbar, Typography } from '@mui/material';
 import { AuthContext } from '../../contexts/AuthContext';
 import { useHistory } from 'react-router-dom';
-import { logoutTimerId } from '../../utils/helpers';
+import { logoutAlertTimerId, logoutTimerId } from '../../utils/helpers';
 
 const navbarStyles = {
 	padding: 2,
@@ -17,6 +17,8 @@ function Navbar() {
 		logOut();
 		// clear the logout timer
 		clearTimeout(logoutTimerId);
+		// clear the logout alert timer
+		clearTimeout(logoutAlertTimerId);
 		// redirect the user to the login page
 		history.push('/login');
 	}
