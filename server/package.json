@@ -6,7 +6,8 @@
 	"type": "module",
 	"proxy": "http://localhost:5000",
 	"scripts": {
-		"start": "nodemon index.js"
+		"start": "node index.js",
+		"dev": "nodemon index.js"
 	},
 	"author": "Mushfiq Rahman",
 	"license": "ISC",
