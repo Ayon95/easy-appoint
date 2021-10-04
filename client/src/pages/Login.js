@@ -1,14 +1,14 @@
 import React, { useContext, useEffect, useRef, useState } from 'react';
 import { Formik } from 'formik';
-import { styled } from '@mui/material/styles';
 import InputField from './../components/Forms/InputField';
-import Form from './../components/Forms/Form';
+import AuthForm from '../components/Forms/AuthForm';
 import { Link, Typography } from '@mui/material';
 import { Link as RouterLink, useHistory } from 'react-router-dom';
 import stylesConfig from '../utils/stylesConfig';
 import { loginValidationSchema } from '../services/formService';
 import AlertComponent from '../components/Generic/AlertComponent';
 import { AuthContext } from '../contexts/AuthContext';
+import AuthPageContainer from './../components/Generic/AuthPageContainer';
 
 function Login() {
 	const { user, logIn, isLoading, error } = useContext(AuthContext);
@@ -32,7 +32,7 @@ function Login() {
 		setAlertIsOpen(true);
 	}
 	return (
-		<LoginFormContainer>
+		<AuthPageContainer>
 			<Formik
 				initialValues={{ username: '', password: '' }}
 				validationSchema={loginValidationSchema}
@@ -42,7 +42,7 @@ function Login() {
 				validateOnChange={false}
 			>
 				{formik => (
-					<Form
+					<AuthForm
 						title="Log In"
 						handleSubmit={formik.handleSubmit}
 						buttonText="Log In"
@@ -82,19 +82,11 @@ function Login() {
 								closeAlert={closeAlert}
 							/>
 						)}
-					</Form>
+					</AuthForm>
 				)}
 			</Formik>
-		</LoginFormContainer>
+		</AuthPageContainer>
 	);
 }
-
-const LoginFormContainer = styled('div')(({ theme }) => ({
-	padding: theme.spacing(stylesConfig.formContainerPadding),
-	minHeight: '85vh',
-	display: 'flex',
-	justifyContent: 'center',
-	alignItems: 'center',
-}));
 
 export default Login;

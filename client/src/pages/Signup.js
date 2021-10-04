@@ -2,13 +2,14 @@ import React, { useContext, useEffect, useRef, useState } from 'react';
 import { Formik } from 'formik';
 import { styled } from '@mui/material/styles';
 import InputField from './../components/Forms/InputField';
-import Form from './../components/Forms/Form';
+import AuthForm from '../components/Forms/AuthForm';
 import { Grid, Link, Typography } from '@mui/material';
 import { Link as RouterLink, useHistory } from 'react-router-dom';
 import stylesConfig from '../utils/stylesConfig';
 import { signupValidationSchema } from '../services/formService';
 import { AuthContext } from '../contexts/AuthContext';
 import withAlert from '../components/HOCs/withAlert';
+import AuthPageContainer from './../components/Generic/AuthPageContainer';
 
 function Signup({ showAlert }) {
 	const [signupProcessed, setSignupProcessed] = useState(false);
@@ -45,7 +46,7 @@ function Signup({ showAlert }) {
 		setSignupProcessed(true);
 	}
 	return (
-		<SignupFormContainer>
+		<AuthPageContainer>
 			<Formik
 				initialValues={{
 					username: '',
@@ -61,7 +62,7 @@ function Signup({ showAlert }) {
 				validateOnChange={false}
 			>
 				{formik => (
-					<Form
+					<AuthForm
 						title="Sign Up"
 						handleSubmit={formik.handleSubmit}
 						buttonText="Sign up"
@@ -91,7 +92,6 @@ function Signup({ showAlert }) {
 								/>
 							</Grid>
 						</Grid>
-
 						<InputField
 							type="text"
 							name="organization"
@@ -101,7 +101,6 @@ function Signup({ showAlert }) {
 							// first check if the input field is touched
 							errorMessage={formik.touched.organization && formik.errors.organization}
 						/>
-
 						<Grid container spacing={1}>
 							<Grid item xs={12} sm={6}>
 								<InputField
@@ -114,7 +113,6 @@ function Signup({ showAlert }) {
 									errorMessage={formik.touched.password && formik.errors.password}
 								/>
 							</Grid>
-
 							<Grid item xs={12} sm={6}>
 								<InputField
 									type="password"
@@ -127,17 +125,16 @@ function Signup({ showAlert }) {
 								/>
 							</Grid>
 						</Grid>
-
 						<Typography sx={{ marginBottom: stylesConfig.formSpacing }}>
 							Already have an account?{' '}
 							<Link underline="hover" component={RouterLink} to="/">
 								Log in
 							</Link>
 						</Typography>
-					</Form>
+					</AuthForm>
 				)}
 			</Formik>
-		</SignupFormContainer>
+		</AuthPageContainer>
 	);
 }
 

@@ -3,7 +3,7 @@ import { Button, Typography } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import stylesConfig from '../../utils/stylesConfig';
 
-function Form({ title, handleSubmit, buttonText, isLoading, children }) {
+function AuthForm({ title, handleSubmit, buttonText, isLoading, children }) {
 	return (
 		<FormComponent onSubmit={handleSubmit} noValidate>
 			<Typography variant="h4" color="primary" sx={{ marginBottom: stylesConfig.formSpacing }}>
@@ -26,4 +26,4 @@ const FormComponent = styled('form')(({ theme }) => ({
 	maxWidth: '50rem',
 }));
 
-export default Form;
+export default AuthForm;
