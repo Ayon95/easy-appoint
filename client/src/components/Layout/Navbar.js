@@ -5,8 +5,11 @@ import { useHistory } from 'react-router-dom';
 import { logoutAlertTimerId, logoutTimerId } from '../../utils/helpers';
 
 const navbarStyles = {
-	padding: 2,
+	paddingY: 2,
 	justifyContent: 'space-between',
+	width: '100%',
+	maxWidth: '75rem',
+	margin: '0 auto',
 };
 
 function Navbar() {

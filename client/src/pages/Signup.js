@@ -1,6 +1,5 @@
 import React, { useContext, useEffect, useRef, useState } from 'react';
 import { Formik } from 'formik';
-import { styled } from '@mui/material/styles';
 import InputField from './../components/Forms/InputField';
 import AuthForm from '../components/Forms/AuthForm';
 import { Grid, Link, Typography } from '@mui/material';
@@ -137,13 +136,5 @@ function Signup({ showAlert }) {
 		</AuthPageContainer>
 	);
 }
-
-const SignupFormContainer = styled('div')(({ theme }) => ({
-	padding: theme.spacing(stylesConfig.formContainerPadding),
-	minHeight: '85vh',
-	display: 'flex',
-	justifyContent: 'center',
-	alignItems: 'center',
-}));
 
 export default withAlert(Signup);

@@ -9,7 +9,8 @@ import UpdateAppointmentForm from '../components/Forms/UpdateAppointmentForm';
 import AddAppointmentForm from '../components/Forms/AddAppointmentForm';
 import withAlert from './../components/HOCs/withAlert';
 
-const pageContainerStyles = { minHeight: '80.4vh', paddingX: 2, paddingY: 4 };
+// the total height of Navbar and Footer will be 142.4/16 = 8.9rem
+const pageContainerStyles = { minHeight: 'calc(100vh - 8.9rem)', paddingY: 4 };
 
 // If the user searches for specific appointments, then the table should show those appointments (without any pagination)
 
@@ -32,7 +33,7 @@ function Home({ showAlert }) {
 		setAppointmentToUpdate(null);
 	}
 	return (
-		<Container sx={pageContainerStyles} maxWidth={false}>
+		<Container sx={pageContainerStyles}>
 			<TitleAndButtonContainer>
 				<Typography variant="h4" color="primary" sx={{ marginBottom: { xs: 1.5, sm: 0 } }}>
 					Your Appointments

@@ -5,6 +5,7 @@ import { useQuery } from 'react-query';
 import { AuthContext } from './../../contexts/AuthContext';
 import { getAppointmentsBySearch } from '../../services/appointmentService';
 import { setQueryRetry } from '../../utils/helpers';
+import LoadingSpinner from './LoadingSpinner';
 
 /* How the appointment search will work:
 
@@ -70,58 +71,61 @@ function Searchbar(props) {
 		setSearchedAppointments([]);
 	}
 	return (
-		<Grid container sx={{ marginBottom: 2 }} spacing={2}>
-			<Grid item xs={12}>
-				<TextField
-					type="text"
-					value={searchTerm}
-					onChange={e => setSearchTerm(e.target.value)}
-					placeholder="Search by name..."
-					fullWidth
-					sx={{ marginRight: 1 }}
-					InputProps={{
-						startAdornment: (
-							<InputAdornment position="start">
-								<SearchOutlined />
-							</InputAdornment>
-						),
-					}}
-				/>
-			</Grid>
-			{searchResultMessage && (
+		<>
+			{isLoading && <LoadingSpinner />}
+			<Grid container sx={{ marginBottom: 2 }} spacing={2}>
 				<Grid item xs={12}>
-					<Typography variant="body1" fontStyle="italic" fontWeight="bold">
-						{searchResultMessage}
-					</Typography>
+					<TextField
+						type="text"
+						value={searchTerm}
+						onChange={e => setSearchTerm(e.target.value)}
+						placeholder="Search by name..."
+						fullWidth
+						sx={{ marginRight: 1 }}
+						InputProps={{
+							startAdornment: (
+								<InputAdornment position="start">
+									<SearchOutlined />
+								</InputAdornment>
+							),
+						}}
+					/>
 				</Grid>
-			)}
-			{/* this container is acting both as a grid item and a grid container */}
-			<Grid item xs={12} justifyContent="flex-end" container spacing={1}>
-				<Grid item>
-					<Button
-						type="button"
-						variant="contained"
-						color="primary"
-						size="large"
-						disabled={isLoading}
-						onClick={handleClickSearch}
-					>
-						Search
-					</Button>
-				</Grid>
-				<Grid item>
-					<Button
-						type="button"
-						variant="contained"
-						color="secondary"
-						size="large"
-						onClick={handleClickReset}
-					>
-						Reset
-					</Button>
+				{searchResultMessage && (
+					<Grid item xs={12}>
+						<Typography variant="body1" fontStyle="italic" fontWeight="bold">
+							{searchResultMessage}
+						</Typography>
+					</Grid>
+				)}
+				{/* this container is acting both as a grid item and a grid container */}
+				<Grid item xs={12} justifyContent="flex-end" container spacing={1}>
+					<Grid item>
+						<Button
+							type="button"
+							variant="contained"
+							color="primary"
+							size="large"
+							disabled={isLoading}
+							onClick={handleClickSearch}
+						>
+							Search
+						</Button>
+					</Grid>
+					<Grid item>
+						<Button
+							type="button"
+							variant="contained"
+							color="secondary"
+							size="large"
+							onClick={handleClickReset}
+						>
+							Reset
+						</Button>
+					</Grid>
 				</Grid>
 			</Grid>
-		</Grid>
+		</>
 	);
 }
 

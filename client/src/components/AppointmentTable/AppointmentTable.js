@@ -7,6 +7,7 @@ import TableHeadComponent from './TableHeadComponent';
 import { AuthContext } from './../../contexts/AuthContext';
 import Pagination from './Pagination';
 import { setQueryRetry } from '../../utils/helpers';
+import LoadingSpinner from '../Generic/LoadingSpinner';
 
 /* How the table pagination will work:
 Front-end
@@ -68,7 +69,7 @@ function AppointmentTable({ searchedAppointments, setAppointmentToUpdate, openMo
 		token: user.token,
 	};
 	// the returned data will be an object that looks like this -> {totalAppointments: , appointments: [...]}
-	const { data, isSuccess } = useQuery(
+	const { data, isLoading, isSuccess } = useQuery(
 		['appointments', requestData],
 		() => getAppointments(requestData),
 		{
@@ -90,45 +91,48 @@ function AppointmentTable({ searchedAppointments, setAppointmentToUpdate, openMo
 	}
 
 	return (
-		<Paper elevation={0}>
-			<TableContainer>
-				<Table>
-					<TableHeadComponent
-						columns={columns}
-						sortBy={sortBy}
-						sortDirection={sortDirection}
-						handleClickSort={handleClickSort}
-						searchedAppointments={searchedAppointments}
+		<>
+			{isLoading && <LoadingSpinner />}
+			<Paper elevation={0}>
+				<TableContainer>
+					<Table>
+						<TableHeadComponent
+							columns={columns}
+							sortBy={sortBy}
+							sortDirection={sortDirection}
+							handleClickSort={handleClickSort}
+							searchedAppointments={searchedAppointments}
+						/>
+						{searchedAppointments.length === 0 && isSuccess && (
+							<TableBodyComponent
+								appointments={data.appointments}
+								setAppointmentToUpdate={setAppointmentToUpdate}
+								openModal={openModal}
+								showAlert={showAlert}
+							/>
+						)}
+						{searchedAppointments.length > 0 && (
+							<TableBodyComponent
+								appointments={searchedAppointments}
+								setAppointmentToUpdate={setAppointmentToUpdate}
+								openModal={openModal}
+								showAlert={showAlert}
+							/>
+						)}
+					</Table>
+				</TableContainer>
+				{searchedAppointments.length === 0 && isSuccess && (
+					<Pagination
+						count={data.totalAppointments}
+						page={page - 1}
+						rowsPerPage={rowsPerPage}
+						rowsPerPageOptions={rowsPerPageOptions}
+						setPage={setPage}
+						setRowsPerPage={setRowsPerPage}
 					/>
-					{searchedAppointments.length === 0 && isSuccess && (
-						<TableBodyComponent
-							appointments={data.appointments}
-							setAppointmentToUpdate={setAppointmentToUpdate}
-							openModal={openModal}
-							showAlert={showAlert}
-						/>
-					)}
-					{searchedAppointments.length > 0 && (
-						<TableBodyComponent
-							appointments={searchedAppointments}
-							setAppointmentToUpdate={setAppointmentToUpdate}
-							openModal={openModal}
-							showAlert={showAlert}
-						/>
-					)}
-				</Table>
-			</TableContainer>
-			{searchedAppointments.length === 0 && isSuccess && (
-				<Pagination
-					count={data.totalAppointments}
-					page={page - 1}
-					rowsPerPage={rowsPerPage}
-					rowsPerPageOptions={rowsPerPageOptions}
-					setPage={setPage}
-					setRowsPerPage={setRowsPerPage}
-				/>
-			)}
-		</Paper>
+				)}
+			</Paper>
+		</>
 	);
 }
 
