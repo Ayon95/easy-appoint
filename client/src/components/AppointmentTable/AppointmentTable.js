@@ -1,4 +1,4 @@
-import { Paper, Table, TableContainer } from '@mui/material';
+import { Paper, Table, TableContainer, Typography } from '@mui/material';
 import React, { useContext, useState } from 'react';
 import { useQuery } from 'react-query';
 import { getAppointments } from '../../services/appointmentService';
@@ -93,45 +93,52 @@ function AppointmentTable({ searchedAppointments, setAppointmentToUpdate, openMo
 	return (
 		<>
 			{isLoading && <LoadingSpinner />}
-			<Paper elevation={0}>
-				<TableContainer>
-					<Table>
-						<TableHeadComponent
-							columns={columns}
-							sortBy={sortBy}
-							sortDirection={sortDirection}
-							handleClickSort={handleClickSort}
-							searchedAppointments={searchedAppointments}
+			{data.appointments.length === 0 && (
+				<Typography variant="h5" textAlign="center">
+					You don't have any appointments
+				</Typography>
+			)}
+			{data.appointments.length > 0 && (
+				<Paper elevation={0}>
+					<TableContainer>
+						<Table>
+							<TableHeadComponent
+								columns={columns}
+								sortBy={sortBy}
+								sortDirection={sortDirection}
+								handleClickSort={handleClickSort}
+								searchedAppointments={searchedAppointments}
+							/>
+							{searchedAppointments.length === 0 && isSuccess && (
+								<TableBodyComponent
+									appointments={data.appointments}
+									setAppointmentToUpdate={setAppointmentToUpdate}
+									openModal={openModal}
+									showAlert={showAlert}
+								/>
+							)}
+							{searchedAppointments.length > 0 && (
+								<TableBodyComponent
+									appointments={searchedAppointments}
+									setAppointmentToUpdate={setAppointmentToUpdate}
+									openModal={openModal}
+									showAlert={showAlert}
+								/>
+							)}
+						</Table>
+					</TableContainer>
+					{searchedAppointments.length === 0 && isSuccess && (
+						<Pagination
+							count={data.totalAppointments}
+							page={page - 1}
+							rowsPerPage={rowsPerPage}
+							rowsPerPageOptions={rowsPerPageOptions}
+							setPage={setPage}
+							setRowsPerPage={setRowsPerPage}
 						/>
-						{searchedAppointments.length === 0 && isSuccess && (
-							<TableBodyComponent
-								appointments={data.appointments}
-								setAppointmentToUpdate={setAppointmentToUpdate}
-								openModal={openModal}
-								showAlert={showAlert}
-							/>
-						)}
-						{searchedAppointments.length > 0 && (
-							<TableBodyComponent
-								appointments={searchedAppointments}
-								setAppointmentToUpdate={setAppointmentToUpdate}
-								openModal={openModal}
-								showAlert={showAlert}
-							/>
-						)}
-					</Table>
-				</TableContainer>
-				{searchedAppointments.length === 0 && isSuccess && (
-					<Pagination
-						count={data.totalAppointments}
-						page={page - 1}
-						rowsPerPage={rowsPerPage}
-						rowsPerPageOptions={rowsPerPageOptions}
-						setPage={setPage}
-						setRowsPerPage={setRowsPerPage}
-					/>
-				)}
-			</Paper>
+					)}
+				</Paper>
+			)}
 		</>
 	);
 }
