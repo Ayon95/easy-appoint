@@ -6,6 +6,10 @@ import {
 	startLogoutTimer,
 } from '../utils/helpers';
 
+// development
+// const baseUrl = 'http://localhost:5000/user';
+
+// production
 const baseUrl = 'https://easy-appoint-mushfiq.herokuapp.com/user';
 export const AuthContext = React.createContext();
 
