@@ -12,8 +12,6 @@ dotenv.config({
 	path: path.resolve(__dirname, '..', `.env.${process.env.NODE_ENV}`),
 });
 
-console.log(path.resolve(__dirname, '..', `.env.${process.env.NODE_ENV}`));
-
 const config = {
 	PORT: process.env.PORT,
 

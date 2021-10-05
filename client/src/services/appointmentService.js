@@ -1,6 +1,6 @@
 import { checkAndHandleApiErrors, checkAndHandleNetworkError } from '../utils/helpers';
 
-const baseUrl = 'http://localhost:5000/appointments';
+const baseUrl = 'https://easy-appoint-mushfiq.herokuapp.com/appointments';
 
 // this function will send a GET request to the server to fetch appointments
 export async function getAppointments(requestData) {
