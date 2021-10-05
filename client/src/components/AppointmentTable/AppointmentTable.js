@@ -40,7 +40,6 @@ Backend
 - the server will extract those query parameters and use them in the database query
 */
 const columns = [
-	{ name: 'id', label: 'ID', sortingIsDisabled: true },
 	{ name: 'fullName', label: 'Full name' },
 	{ name: 'age', label: 'Age' },
 	{ name: 'phoneNumber', label: 'Phone number', sortingIsDisabled: true },

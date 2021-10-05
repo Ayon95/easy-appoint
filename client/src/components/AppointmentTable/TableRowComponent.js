@@ -55,7 +55,6 @@ function TableRowComponent({ appointment, setAppointmentToUpdate, openModal, sho
 	}
 	return (
 		<TableRow sx={isToday(new Date(date)) ? isTodayStyles : {}}>
-			<TableCell>{appointment_id}</TableCell>
 			<TableCell>{full_name}</TableCell>
 			<TableCell>{age}</TableCell>
 			<TableCell>{phone_number}</TableCell>
