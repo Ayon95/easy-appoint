@@ -6,8 +6,8 @@
 	"type": "module",
 	"proxy": "http://localhost:5000",
 	"scripts": {
-		"start": "node index.js",
-		"dev": "nodemon index.js"
+		"start": "set NODE_ENV=production&& node index.js",
+		"dev": "set NODE_ENV=development&& nodemon index.js"
 	},
 	"author": "Mushfiq Rahman",
 	"license": "ISC",
