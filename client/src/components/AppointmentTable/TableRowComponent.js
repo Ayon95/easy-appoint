@@ -11,7 +11,7 @@ import { setQueryRetry } from '../../utils/helpers';
 // these styles will be added to the appointments whose dates are equal to today's date
 const isTodayStyles = {
 	backgroundColor: yellow[100],
-	'& > *': {
+	'& > td': {
 		fontWeight: 600,
 	},
 };
