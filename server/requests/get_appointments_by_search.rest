@@ -1,2 +1,0 @@
-GET http://localhost:5000/appointments/search?search_term=mic
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjE5LCJpYXQiOjE2MzI5MzYxNDEsImV4cCI6MTYzMjk1NDE0MX0.WpO03OhG2RlARcHbAP674hhgbyyJevlfFhpUipvawFA

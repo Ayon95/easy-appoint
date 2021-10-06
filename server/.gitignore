@@ -1,4 +1,5 @@
 /node_modules
+/requests
 .env
 .env.development
 .env.production
