@@ -53,7 +53,6 @@ function TableRowComponent({ appointment, setAppointmentToUpdate, openModal, sho
 		// open the modal that will show the Appointment form
 		openModal();
 	}
-	console.log(isToday(new Date(date)));
 	return (
 		<TableRow sx={isToday(new Date(date)) ? isTodayStyles : {}}>
 			<TableCell>{full_name}</TableCell>
