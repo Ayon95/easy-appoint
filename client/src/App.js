@@ -1,3 +1,4 @@
+import React, { Suspense } from 'react';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import { CssBaseline } from '@mui/material';
 import { ThemeProvider } from '@mui/material';
@@ -5,12 +6,14 @@ import AdapterDateFns from '@mui/lab/AdapterDateFns';
 import { LocalizationProvider } from '@mui/lab';
 import Layout from './components/Layout/Layout';
 import theme from './utils/theme';
-import Login from './pages/Login';
-import Signup from './pages/Signup';
-import Home from './pages/Home';
 import ProtectedRoute from './components/Generic/ProtectedRoute';
 import AuthContextProvider from './contexts/AuthContext';
-import NotFound from './pages/NotFound';
+import LoadingSpinner from './components/Generic/LoadingSpinner';
+
+const Login = React.lazy(() => import('./pages/Login'));
+const Signup = React.lazy(() => import('./pages/Signup'));
+const Home = React.lazy(() => import('./pages/Home'));
+const NotFound = React.lazy(() => import('./pages/NotFound'));
 
 function App() {
 	return (
@@ -21,18 +24,20 @@ function App() {
 						<CssBaseline />
 						<div className="App">
 							<Layout>
-								<Switch>
-									<Route exact path="/login">
-										<Login />
-									</Route>
-									<Route exact path="/signup">
-										<Signup />
-									</Route>
-									<ProtectedRoute path="/" exact={true} component={Home} />
-									<Route path="*">
-										<NotFound />
-									</Route>
-								</Switch>
+								<Suspense fallback={<LoadingSpinner />}>
+									<Switch>
+										<Route exact path="/login">
+											<Login />
+										</Route>
+										<Route exact path="/signup">
+											<Signup />
+										</Route>
+										<ProtectedRoute path="/" exact={true} component={Home} />
+										<Route path="*">
+											<NotFound />
+										</Route>
+									</Switch>
+								</Suspense>
 							</Layout>
 						</div>
 					</LocalizationProvider>
