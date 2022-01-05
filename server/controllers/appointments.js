@@ -50,6 +50,7 @@ export async function getAppointments(request, response, next) {
 				DATE_FORMAT(date, '%a %b %e, %Y') AS date,
 				TIME_FORMAT(time, '%l:%i %p') AS time
 			FROM appointment
+			WHERE fk__appointment__user_id = ${pool.escape(user.user_id)}
 			ORDER BY ${pool.escape(orderByColumns).replace(/\'/g, '')}
 			LIMIT ${pool.escape(startIndex)}, ${pool.escape(endIndex)}
 		`;
@@ -81,7 +82,9 @@ export async function getAppointmentsBySearch(request, response, next) {
 				DATE_FORMAT(date, '%a %b %e, %Y') AS date,
 				TIME_FORMAT(time, '%l:%i %p') AS time
 			FROM appointment
-			WHERE full_name LIKE ${pool.escape(`%${searchTerm}%`)}
+			WHERE
+				fk__appointment__user_id = ${pool.escape(user.user_id)} AND
+				full_name LIKE ${pool.escape(`%${searchTerm}%`)}
 			ORDER BY
 				appointment.date DESC,
 				appointment.time DESC
